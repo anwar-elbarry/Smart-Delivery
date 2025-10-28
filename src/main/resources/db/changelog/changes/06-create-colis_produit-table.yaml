@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 6
+      author: anwar
+      changes:
+        - createTable:
+            tableName: colis_produit
+            columns:
+              - column:
+                  name: colis_id
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_colis_produit_colis
+                    references: colis(id)
+              - column:
+                  name: produit_id
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_colis_produit_produit
+                    references: produit(id)
+              - column:
+                  name: quantite
+                  type: INT
+              - column:
+                  name: date_ajout
+                  type: timestamp
+              - column:
+                  name: prix
+                  type: DECIMAL(10,2)
+
+        - addPrimaryKey:
+            tableName: colis_produit
+            columnNames: id_colis, id_produit
+            constraintName: pk_colis_produit

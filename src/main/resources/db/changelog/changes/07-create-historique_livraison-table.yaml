@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: 7
+      author: admin
+      changes:
+        - createTable:
+            tableName: historique_livraison
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(50)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: colis_id
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_historique_livraison_colis
+                    references: colis(id)
+              - column:
+                  name: statut
+                  type: varchar(20)
+              - column:
+                  name: date_changement
+                  type: timestamp
+              - column:
+                  name: commentaire
+                  type: varchar(100)

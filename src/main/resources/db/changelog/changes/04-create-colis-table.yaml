@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4
+      author: admin
+      changes:
+        - createTable:
+            tableName: colis
+            columns:
+              - column:
+                  name: id
+                  type: varchar(50)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: description
+                  type: varchar(50)
+              - column:
+                  name: poids
+                  type: numeric(10,3)
+              - column:
+                  name: statut
+                  type: varchar(20)
+              - column:
+                  name: priorite
+                  type: varchar(50)
+              - column:
+                  name: livreur_id
+                  type: varchar(50)
+                  constraints:
+                    foreignKeyName: fk_colis_livreur
+                    references: livreur(id)
+              - column:
+                  name: client_expediteur_id
+                  type: varchar(50)
+                  constraints:
+                    foreignKeyName: fk_colis_user
+                    references: user(id)
+              - column:
+                  name: destinataire_id
+                  type: varchar(50)
+                  constraints:
+                    foreignKeyName: fk_colis_user
+                    references: user(id)

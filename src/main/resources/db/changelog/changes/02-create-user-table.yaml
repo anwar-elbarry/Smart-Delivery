@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: admin
+      changes:
+        - createTable:
+            tableName: user
+            columns:
+              - column:
+                  name: id
+                  type: varchar(50)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: nom
+                  type: varchar(50)
+              - column:
+                  name: prenom
+                  type: varchar(50)
+              - column:
+                  name: email
+                  type: varchar(100)
+              - column:
+                  name: telephone
+                  type: varchar(20)
+              - column:
+                  name: adresse
+                  type: varchar(255)
+              - column:
+                  name: role
+                  type: varchar(20)

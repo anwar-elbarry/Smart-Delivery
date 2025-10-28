@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5
+      author: admin
+      changes:
+        - createTable:
+            tableName: produits
+            columns:
+              - column:
+                  name: id
+                  type: varchar(50)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: nom
+                  type: varchar(50)
+              - column:
+                  name: categorie
+                  type: varchar(50)
+              - column:
+                  name: poids
+                  type: numeric(10,3)
+              - column:
+                  name: prix
+                  type: numeric(10,2)

@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: admin
+      changes:
+        - createTable:
+            tableName: zone
+            columns:
+              - column:
+                  name: id
+                  type: varchar(50)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: nome
+                  type: varchar(50)
+              - column:
+                  name: codePostal
+                  type: int

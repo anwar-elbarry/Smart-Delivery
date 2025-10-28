@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: admin
+      changes:
+        - createTable:
+            tableName: livreur
+            columns:
+              - column:
+                  name: id
+                  type: varchar(50)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    foreignKeyName: fk_livreur_user
+                    references: user(id)
+              - column:
+                  name: vehicule
+                  type: VARCHAR(100)
+              - column:
+                  name: zone_assignee_id
+                  type: VARCHAR(50)
+                  constraints:
+                    foreignKeyName: fk_livreur_zone
+                    references: zone(id)
