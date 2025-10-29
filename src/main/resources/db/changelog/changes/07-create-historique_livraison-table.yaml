@@ -16,8 +16,6 @@ databaseChangeLog:
                   type: VARCHAR(50)
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_historique_livraison_colis
-                    references: colis(id)
               - column:
                   name: statut
                   type: varchar(20)
@@ -27,3 +25,9 @@ databaseChangeLog:
               - column:
                   name: commentaire
                   type: varchar(100)
+        - addForeignKeyConstraint:
+            baseColumnNames: colis_id
+            baseTableName: historique_livraison
+            constraintName: fk_historique_livraison_colis
+            referencedTableName: colis
+            referencedColumnNames: id

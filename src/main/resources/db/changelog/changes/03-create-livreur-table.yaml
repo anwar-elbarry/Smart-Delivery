@@ -12,14 +12,21 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     nullable: false
-                    foreignKeyName: fk_livreur_user
-                    references: user(id)
               - column:
                   name: vehicule
                   type: VARCHAR(100)
               - column:
                   name: zone_assignee_id
                   type: VARCHAR(50)
-                  constraints:
-                    foreignKeyName: fk_livreur_zone
-                    references: zone(id)
+        - addForeignKeyConstraint:
+            baseTableName: livreurs
+            baseColumnNames: zone_assignee_id
+            constraintName: fk_livreur_zone_assignee
+            referencedTableName: zone
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: livreurs
+            baseColumnNames: id
+            constraintName: fk_livreur_id
+            referencedTableName: users
+            referencedColumnNames: id

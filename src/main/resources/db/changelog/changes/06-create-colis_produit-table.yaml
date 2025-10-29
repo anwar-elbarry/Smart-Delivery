@@ -11,15 +11,11 @@ databaseChangeLog:
                   type: VARCHAR(50)
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_colis_produit_colis
-                    references: colis(id)
               - column:
                   name: produit_id
                   type: VARCHAR(50)
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_colis_produit_produit
-                    references: produit(id)
               - column:
                   name: quantite
                   type: INT
@@ -29,8 +25,15 @@ databaseChangeLog:
               - column:
                   name: prix
                   type: DECIMAL(10,2)
-
-        - addPrimaryKey:
-            tableName: colis_produit
-            columnNames: id_colis, id_produit
-            constraintName: pk_colis_produit
+        - addForeignKeyConstraint:
+           baseColumnNames: colis_id
+           baseTableName: colis_produit
+           constraintName: fk_colis_produit_colis
+           referencedTableName: colis
+           referencedColumnNames: id
+        - addForeignKeyConstraint:
+           baseColumnNames: produit_id
+           baseTableName: colis_produit
+           constraintName: fk_colis_produit_produit
+           referencedTableName: produit
+           referencedColumnNames: id

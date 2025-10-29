@@ -26,18 +26,27 @@ databaseChangeLog:
               - column:
                   name: livreur_id
                   type: varchar(50)
-                  constraints:
-                    foreignKeyName: fk_colis_livreur
-                    references: livreur(id)
               - column:
                   name: client_expediteur_id
                   type: varchar(50)
-                  constraints:
-                    foreignKeyName: fk_colis_user
-                    references: user(id)
               - column:
                   name: destinataire_id
                   type: varchar(50)
-                  constraints:
-                    foreignKeyName: fk_colis_user
-                    references: user(id)
+        - addForeignKeyConstraint:
+            baseColumnNames: livreur_id
+            baseTableName: colis
+            constraintName: fk_colis_livreur
+            referencedTableName: livreurs
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseColumnNames: client_expediteur_id
+            baseTableName: colis
+            constraintName: fk_colis_client_expediteur
+            referencedTableName: users
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseColumnNames: destinataire_id
+            baseTableName: colis
+            constraintName: fk_colis_destinataire
+            referencedTableName: users
+            referencedColumnNames: id
