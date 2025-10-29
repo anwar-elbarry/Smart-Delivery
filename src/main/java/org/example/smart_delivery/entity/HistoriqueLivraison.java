@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.smart_delivery.entity.enums.ColisStatus;
 
+import java.sql.Timestamp;
+
 @Getter
 @Setter
 
@@ -14,10 +16,13 @@ public class HistoriqueLivraison {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    @Column(name = "colis_id")
-    private String colisId;
+
+    @ManyToOne
+    @JoinColumn(name = "colis_id")
+    private Colis colisId;
+
     private ColisStatus statut;
     @Column(name = "date_changement")
-    private String dateChangement;
+    private Timestamp dateChangement;
     private String commentaire;
 }

@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 
@@ -15,6 +19,9 @@ public class Produit {
     private String id;
     private String nom;
     private String categorie;
-    private String poids;
-    private String prix;
+    private double poids;
+    private BigDecimal prix;
+
+    @OneToMany(mappedBy = "produit",orphanRemoval = true , cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    List<ColisProduit> colisProduitList = new ArrayList<>();
 }

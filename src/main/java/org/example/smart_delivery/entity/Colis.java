@@ -7,6 +7,8 @@ import org.example.smart_delivery.entity.enums.ColisStatus;
 import org.example.smart_delivery.entity.enums.Priority;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -23,10 +25,18 @@ public class Colis {
     private ColisStatus statut;
     private Priority priorite;
 
-    @Column(name = "livreur_id")
-    private String livreurId;
-    @Column(name = "client_expediteur_id")
-    private String clientExpediteurId;
-    @Column(name = "destinataire_id")
-    private String destinataireId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "livreur_id")
+    private Livreur livreur;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_expediteur_id")
+    private User clientExpediteurId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "destinataire_id")
+    private User destinataireId;
+
+    @OneToMany(mappedBy = "colis",orphanRemoval = true , cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    List<ColisProduit> colisProduitList = new ArrayList<>();
 }
