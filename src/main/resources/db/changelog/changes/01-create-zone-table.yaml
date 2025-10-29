@@ -15,5 +15,5 @@ databaseChangeLog:
                   name: nome
                   type: varchar(50)
               - column:
-                  name: codePostal
+                  name: code_postal
                   type: int

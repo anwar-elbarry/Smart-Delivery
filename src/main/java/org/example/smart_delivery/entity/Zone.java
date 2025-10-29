@@ -16,5 +16,5 @@ public class Zone {
     private String nom;
 
     @Column(name = "code_postal")
-    private String codePostal;
+    private int codePostal;
 }
