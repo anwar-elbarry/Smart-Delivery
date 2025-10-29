@@ -35,5 +35,5 @@ databaseChangeLog:
            baseColumnNames: produit_id
            baseTableName: colis_produit
            constraintName: fk_colis_produit_produit
-           referencedTableName: produit
+           referencedTableName: produits
            referencedColumnNames: id
