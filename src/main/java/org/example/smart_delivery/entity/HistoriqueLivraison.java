@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.smart_delivery.entity.enums.ColisStatus;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -23,6 +23,6 @@ public class HistoriqueLivraison {
 
     private ColisStatus statut;
     @Column(name = "date_changement")
-    private Timestamp dateChangement;
+    private LocalDateTime dateChangement;
     private String commentaire;
 }

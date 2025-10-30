@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 
 @Getter
@@ -28,7 +28,7 @@ public class ColisProduit {
 
     private int quantite;
     @Column(name = "date_ajout")
-    private Timestamp dateAjout;
+    private LocalDateTime dateAjout;
 
     private BigDecimal prix;
 }
