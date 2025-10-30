@@ -19,7 +19,7 @@ public class HistoriqueLivraison {
 
     @ManyToOne
     @JoinColumn(name = "colis_id")
-    private Colis colisId;
+    private Colis colis;
 
     private ColisStatus statut;
     @Column(name = "date_changement")

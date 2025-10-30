@@ -31,11 +31,11 @@ public class Colis {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_expediteur_id")
-    private User clientExpediteurId;
+    private User clientExpediteur;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "destinataire_id")
-    private User destinataireId;
+    private User destinataire;
 
     @OneToMany(mappedBy = "colis",orphanRemoval = true , cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     List<ColisProduit> colisProduitList = new ArrayList<>();

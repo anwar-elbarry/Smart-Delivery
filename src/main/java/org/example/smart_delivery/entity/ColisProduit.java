@@ -20,11 +20,11 @@ public class ColisProduit {
 
     @ManyToOne
     @JoinColumn(name = "produit_id")
-    private Produit produitId;
+    private Produit produit;
 
     @ManyToOne
     @JoinColumn(name = "colis_id")
-    private Colis colisId;
+    private Colis colis;
 
     private int quantite;
     @Column(name = "date_ajout")
