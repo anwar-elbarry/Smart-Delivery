@@ -15,5 +15,6 @@ public interface ColisMapper {
     @Mapping(source = "livreurId", target = "livreur", qualifiedByName = "toLivreurRef")
     @Mapping(source = "clientExpediteurId", target = "clientExpediteur", qualifiedByName = "toUserRef")
     @Mapping(source = "destinataireId", target = "destinataire", qualifiedByName = "toUserRef")
+    @Mapping(target = "colisProduitList", ignore = true)
     Colis toEntity(ColisDTO dto);
 }

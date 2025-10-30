@@ -11,5 +11,6 @@ public interface LivreurMapper {
     LivreurDTO toDto(Livreur entity);
 
     @Mapping(source = "zoneAssigneeId", target = "zoneAssigne", qualifiedByName = "toZoneRef")
+    @Mapping(target = "colisList", ignore = true)
     Livreur toEntity(LivreurDTO dto);
 }
