@@ -13,3 +13,5 @@ databaseChangeLog:
       file: db/changelog/changes/06-create-colis_produit-table.yaml
   - include:
       file: db/changelog/changes/07-create-historique_livraison-table.yaml
+  - include:
+      file: db/changelog/changes/08-Update-users-table.yaml

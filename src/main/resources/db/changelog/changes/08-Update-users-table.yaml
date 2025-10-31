@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 8
+      author: admin
+      changes:
+        - renameColumn:
+            tableName: users
+            oldColumnName: adresse
+            newColumnName: adress
+            columnDataType: varchar(255)
