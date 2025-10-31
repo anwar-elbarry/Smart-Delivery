@@ -3,6 +3,7 @@ package org.example.smart_delivery.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.smart_delivery.entity.enums.UserRole;
 
 @Getter
 @Setter
@@ -20,4 +21,5 @@ public class User {
     private String email;
     private String telephone;
     private String adress;
+    private UserRole role;
 }
