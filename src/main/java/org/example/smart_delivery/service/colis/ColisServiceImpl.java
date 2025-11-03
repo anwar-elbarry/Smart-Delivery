@@ -1,12 +1,16 @@
 package org.example.smart_delivery.service.colis;
 
 import org.example.smart_delivery.dto.ColisDTO;
+import org.example.smart_delivery.dto.LivreurDTO;
 import org.example.smart_delivery.entity.Colis;
+import org.example.smart_delivery.entity.Livreur;
 import org.example.smart_delivery.exception.BusinessException;
 import org.example.smart_delivery.exception.ResourceNotFoundException;
 import org.example.smart_delivery.mapper.ColisMapper;
+import org.example.smart_delivery.mapper.LivreurMapper;
 import org.example.smart_delivery.repository.ColisRepository;
 import lombok.RequiredArgsConstructor;
+import org.example.smart_delivery.repository.LivreurRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +21,8 @@ import java.util.stream.Collectors;
 public class ColisServiceImpl implements ColisService {
     private final ColisRepository colisRepository;
     private final ColisMapper colisMapper;
+    private final LivreurMapper livreurMapper;
+    private final LivreurRepository livreurRepository;
 
     @Override
     public ColisDTO create(ColisDTO dto) {
@@ -57,5 +63,15 @@ public class ColisServiceImpl implements ColisService {
             throw new ResourceNotFoundException("Colis",id);
         }
         colisRepository.deleteById(id);
+    }
+
+    @Override
+    public void Assign_col(String colisId,String livreurId) {
+        Colis colis = colisRepository.findById(colisId)
+                .orElseThrow(() -> new ResourceNotFoundException("Colis",colisId));
+        Livreur livreur = livreurRepository.findById(livreurId)
+                .orElseThrow(() -> new ResourceNotFoundException("Livreur",livreurId));
+        colis.setLivreur(livreur);
+        colisRepository.save(colis);
     }
 }
