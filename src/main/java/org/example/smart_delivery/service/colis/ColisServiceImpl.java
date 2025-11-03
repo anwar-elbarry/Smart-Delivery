@@ -2,6 +2,8 @@ package org.example.smart_delivery.service.colis;
 
 import org.example.smart_delivery.dto.ColisDTO;
 import org.example.smart_delivery.entity.Colis;
+import org.example.smart_delivery.exception.BusinessException;
+import org.example.smart_delivery.exception.ResourceNotFoundException;
 import org.example.smart_delivery.mapper.ColisMapper;
 import org.example.smart_delivery.repository.ColisRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +28,7 @@ public class ColisServiceImpl implements ColisService {
     @Override
     public ColisDTO update(String id, ColisDTO dto) {
         if (!colisRepository.existsById(id)) {
-            throw new IllegalArgumentException("Colis not found: " + id);
+            throw new ResourceNotFoundException("Colis",id);
         }
         Colis entity = colisMapper.toEntity(dto);
         entity.setId(id);
@@ -37,7 +39,7 @@ public class ColisServiceImpl implements ColisService {
     @Override
     public ColisDTO getById(String id) {
         Colis entity = colisRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Colis not found: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Colis",id));
         return colisMapper.toDto(entity);
     }
 
@@ -52,7 +54,7 @@ public class ColisServiceImpl implements ColisService {
     @Override
     public void delete(String id) {
         if (!colisRepository.existsById(id)) {
-            throw new IllegalArgumentException("Colis not found: " + id);
+            throw new ResourceNotFoundException("Colis",id);
         }
         colisRepository.deleteById(id);
     }
