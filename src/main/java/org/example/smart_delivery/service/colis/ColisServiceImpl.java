@@ -4,6 +4,7 @@ import org.example.smart_delivery.dto.ColisDTO;
 import org.example.smart_delivery.dto.LivreurDTO;
 import org.example.smart_delivery.entity.Colis;
 import org.example.smart_delivery.entity.Livreur;
+import org.example.smart_delivery.entity.enums.ColisStatus;
 import org.example.smart_delivery.exception.BusinessException;
 import org.example.smart_delivery.exception.ResourceNotFoundException;
 import org.example.smart_delivery.mapper.ColisMapper;
@@ -73,5 +74,10 @@ public class ColisServiceImpl implements ColisService {
                 .orElseThrow(() -> new ResourceNotFoundException("Livreur",livreurId));
         colis.setLivreur(livreur);
         colisRepository.save(colis);
+    }
+
+    @Override
+    public List<ColisDTO> filterByStatus(ColisStatus status) {
+        return  colisRepository.findColisByStatut(status).stream().map(colisMapper::toDto).toList();
     }
 }
