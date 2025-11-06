@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.example.smart_delivery.dto.ColisDTO;
+import org.example.smart_delivery.dto.ColisProduitDTO;
 import org.example.smart_delivery.service.colis.ColisService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +15,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "Colis",description = "Coli management APIs")
 @RestController
@@ -71,6 +74,19 @@ public class ColisController {
                 : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(page, size, sort);
         return ResponseEntity.ok(colisService.getAll(pageable));
+    }
+    @Operation(summary = "Creat colis Request")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Coli requested"),
+            @ApiResponse(responseCode = "400", description = "Validation error")
+    })
+    @PutMapping("/colisRequest")
+    public ResponseEntity<Void> CreateColisRequest(@RequestParam String expedId ,
+                                                   @RequestParam String distenId,
+                                                   @RequestParam List<String> produitIds )
+    {
+    colisService.createColisRequest(expedId,distenId,produitIds);
+    return ResponseEntity.noContent().build();
     }
 
 }
