@@ -1,4 +1,4 @@
-package org.example.smart_delivery.dto;
+package org.example.smart_delivery.dto.request;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;

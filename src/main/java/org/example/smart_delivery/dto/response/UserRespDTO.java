@@ -1,4 +1,4 @@
-package org.example.smart_delivery.dto;
+package org.example.smart_delivery.dto.response;
 
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import org.example.smart_delivery.entity.enums.UserRole;
 
 @Getter
 @Setter
-public class UserDTO {
+public class UserRespDTO {
     private String id;
 
     @NotBlank
@@ -25,7 +25,8 @@ public class UserDTO {
 
     @NotBlank
     @Size(max = 20)
-    @Pattern(regexp = "^[+0-9().\\-\\s]{7,20}$", message = "telephone format is invalid")    private String telephone;
+    @Pattern(regexp = "^[+0-9().\\-\\s]{7,20}$", message = "telephone format is invalid")
+    private String telephone;
 
     @NotBlank
     @Size(max = 255)

@@ -1,4 +1,4 @@
-package org.example.smart_delivery.dto;
+package org.example.smart_delivery.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -12,6 +12,6 @@ public class ZoneDTO {
 
     @NotBlank
     @Size(max = 50)
-    private String nom;
+    private String nome;
     private Integer codePostal;
 }
