@@ -1,33 +1,39 @@
 package org.example.smart_delivery.service.colis;
 
 import org.example.smart_delivery.dto.ColisDTO;
-import org.example.smart_delivery.dto.LivreurDTO;
-import org.example.smart_delivery.entity.Colis;
-import org.example.smart_delivery.entity.Livreur;
+import org.example.smart_delivery.dto.ColisProduitDTO;
+import org.example.smart_delivery.entity.*;
 import org.example.smart_delivery.entity.enums.ColisStatus;
-import org.example.smart_delivery.exception.BusinessException;
+import org.example.smart_delivery.entity.enums.Priority;
 import org.example.smart_delivery.exception.ResourceNotFoundException;
 import org.example.smart_delivery.mapper.ColisMapper;
-import org.example.smart_delivery.mapper.LivreurMapper;
-import org.example.smart_delivery.repository.ColisRepository;
+import org.example.smart_delivery.mapper.ColisProduitMapper;
+import org.example.smart_delivery.repository.*;
 import lombok.RequiredArgsConstructor;
-import org.example.smart_delivery.repository.LivreurRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ColisServiceImpl implements ColisService {
     private final ColisRepository colisRepository;
     private final ColisMapper colisMapper;
-    private final LivreurMapper livreurMapper;
     private final LivreurRepository livreurRepository;
+    private final UserRepository userRepository;
+    private final ProduitRepository produitRepository;
+    private final ColisProduitRepository colisProduitRepository;
+    private final ColisProduitMapper colisProduitMapper;
 
     @Override
     public ColisDTO create(ColisDTO dto) {
         Colis entity = colisMapper.toEntity(dto);
+        entity.setLivreur(null);
+        entity.setStatut(ColisStatus.CREATED);
         Colis saved = colisRepository.save(entity);
         return colisMapper.toDto(saved);
     }
@@ -51,11 +57,9 @@ public class ColisServiceImpl implements ColisService {
     }
 
     @Override
-    public List<ColisDTO> getAll() {
-        return colisRepository.findAll()
-                .stream()
-                .map(colisMapper::toDto)
-                .collect(Collectors.toList());
+    public Page<ColisDTO> getAll(Pageable pageable) {
+        return colisRepository.findAll(pageable)
+                .map(colisMapper::toDto);
     }
 
     @Override
@@ -73,11 +77,64 @@ public class ColisServiceImpl implements ColisService {
         Livreur livreur = livreurRepository.findById(livreurId)
                 .orElseThrow(() -> new ResourceNotFoundException("Livreur",livreurId));
         colis.setLivreur(livreur);
+        colis.setStatut(ColisStatus.COLLECTED);
         colisRepository.save(colis);
     }
 
     @Override
-    public List<ColisDTO> filterByStatus(ColisStatus status) {
-        return  colisRepository.findColisByStatut(status).stream().map(colisMapper::toDto).toList();
+    public Page<ColisDTO> filterByStatus(ColisStatus status,Pageable pageable) {
+        return  colisRepository.findColisByStatut(status,pageable).map(colisMapper::toDto);
+    }
+    @Override
+    public void createColisRequest(String expedId , String distenId,List<String> produitIds){
+        User exped = userRepository.findById(expedId).orElseThrow(
+                ()->    new ResourceNotFoundException("User",expedId)
+        );
+        User disten = userRepository.findById(distenId).orElseThrow(
+                ()->    new ResourceNotFoundException("User",distenId)
+        );
+        List<Produit> produits = produitIds.stream()
+                .map(id -> produitRepository.findById(id)
+                        .orElseThrow(() -> new ResourceNotFoundException("Produit", id)))
+                .toList();
+        BigDecimal poids = BigDecimal.valueOf(produits.stream().mapToDouble(Produit::getPoids).sum());
+
+        List<String> produitsname = produits.stream().map(Produit::getNom).toList();
+        String produitsApercu = produitsname.size() > 5
+                ? String.join(", ", produitsname.subList(0, 5)) + ", ..."
+                : String.join(", ", produitsname);
+
+
+        String description = String.format(
+                "Colis de l'expéditeur %s vers le destinataire %s — %d produit(s) (%s) — poids total : %.2f g",
+                exped.getNom()+" "+exped.getPrenom(),
+                disten.getNom()+" "+disten.getPrenom() ,
+                produits.size(),
+                produitsApercu,
+                poids
+        );
+
+        int quantity = produits.size();
+
+        ColisDTO colisDTO = new ColisDTO();
+        colisDTO.setPoids(poids);
+        colisDTO.setPriorite(Priority.MEDIUM);
+        colisDTO.setStatut(ColisStatus.CREATED);
+        colisDTO.setDescription(description);
+        colisDTO.setDestinataireId(distenId);
+        colisDTO.setClientExpediteurId(expedId);
+
+
+        Colis colis = colisRepository.save(colisMapper.toEntity(colisDTO));
+        for (Produit produit:  produits){
+            ColisProduitDTO cp = new ColisProduitDTO();
+            cp.setColisId(colis.getId());
+            cp.setProduitId(produit.getId());
+            cp.setQuantite(quantity);
+            cp.setDateAjout(LocalDateTime.now());
+            cp.setPrix(produit.getPrix());
+            ColisProduit cpEntity = colisProduitMapper.toEntity(cp);
+            colisProduitRepository.save(cpEntity);
+        }
     }
 }
