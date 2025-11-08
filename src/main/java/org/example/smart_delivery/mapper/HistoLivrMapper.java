@@ -1,6 +1,6 @@
 package org.example.smart_delivery.mapper;
 
-import org.example.smart_delivery.dto.HistoriqueLivraisonDTO;
+import org.example.smart_delivery.dto.request.HistoriqueLivraisonDTO;
 import org.example.smart_delivery.entity.HistoriqueLivraison;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
