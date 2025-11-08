@@ -11,6 +11,10 @@ databaseChangeLog:
                   type: varchar(50)
                   constraints:
                     primaryKey: true
+              - column:
+                  name: user_id
+                  type: varchar(50)
+                  constraints:
                     nullable: false
               - column:
                   name: vehicule
@@ -26,7 +30,7 @@ databaseChangeLog:
             referencedColumnNames: id
         - addForeignKeyConstraint:
             baseTableName: livreurs
-            baseColumnNames: id
+            baseColumnNames: user_id
             constraintName: fk_livreur_id
             referencedTableName: users
             referencedColumnNames: id

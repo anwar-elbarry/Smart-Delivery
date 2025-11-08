@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 9
+      author: admin
+      changes:
+        - modifyDataType:
+            tableName: colis
+            columnName: description
+            newDataType: varchar(255)

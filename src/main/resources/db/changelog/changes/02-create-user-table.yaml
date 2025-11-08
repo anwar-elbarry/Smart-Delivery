@@ -24,7 +24,7 @@ databaseChangeLog:
                   name: telephone
                   type: varchar(20)
               - column:
-                  name: adresse
+                  name: adress
                   type: varchar(255)
               - column:
                   name: role

@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: 8
+      author: admin
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: colis_produit
+            constraintName: fk_colis_produit_colis
+        - addForeignKeyConstraint:
+            baseTableName: colis_produit
+            baseColumnNames: colis_id
+            constraintName: fk_colis_produit_colis
+            referencedTableName: colis
+            referencedColumnNames: id
+            onDelete: CASCADE
+        - dropForeignKeyConstraint:
+            baseTableName: colis_produit
+            constraintName: fk_colis_produit_produit
+        - addForeignKeyConstraint:
+            baseTableName: colis_produit
+            baseColumnNames: produit_id
+            constraintName: fk_colis_produit_produit
+            referencedTableName: produits
+            referencedColumnNames: id
+            onDelete: CASCADE
