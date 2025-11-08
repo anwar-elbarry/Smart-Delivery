@@ -50,10 +50,10 @@ public class RefMapper {
     public String toId(User u) { return u == null ? null : u.getId(); }
 
     @Named("toIdLivreur")
-    public String toId(Livreur l) { return l == null ? null : l.getId(); }
+    public String toIdLivreur(Livreur l) { return l == null ? null : l.getId(); }
 
     @Named("toIdZone")
-    public String toId(Zone z) { return z == null ? null : z.getId(); }
+    public String toIdZone(Zone z) { return z == null ? null : z.getId(); }
 
     @Named("toColisId")
     public String toColisId(Colis c) { return c == null ? null : c.getId(); }
