@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.smart_delivery.entity.Colis;
 import org.example.smart_delivery.entity.enums.ColisStatus;
 
 import java.time.LocalDateTime;
@@ -13,8 +14,7 @@ import java.time.LocalDateTime;
 public class HistoriqueLivraisonRespDTO {
     private String id;
 
-    @NotBlank
-    private String colisId;
+    private Colis colis;
 
     private ColisStatus statut;
     private LocalDateTime dateChangement;
