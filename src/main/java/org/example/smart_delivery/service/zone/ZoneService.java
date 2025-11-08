@@ -1,6 +1,6 @@
 package org.example.smart_delivery.service.zone;
 
-import org.example.smart_delivery.dto.ZoneDTO;
+import org.example.smart_delivery.dto.request.ZoneDTO;
 import java.util.List;
 
 public interface ZoneService {

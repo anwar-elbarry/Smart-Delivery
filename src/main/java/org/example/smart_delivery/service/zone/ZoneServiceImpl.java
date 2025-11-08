@@ -1,9 +1,9 @@
 package org.example.smart_delivery.service.zone;
 
 import lombok.RequiredArgsConstructor;
-import org.example.smart_delivery.dto.ZoneDTO;
+import org.example.smart_delivery.dto.request.ZoneDTO;
 import org.example.smart_delivery.entity.Zone;
-import org.example.smart_delivery.mapper.ZoneMapper;
+import org.example.smart_delivery.mapper.request.ZoneMapper;
 import org.example.smart_delivery.repository.ZoneRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
