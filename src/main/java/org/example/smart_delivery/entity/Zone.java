@@ -13,7 +13,7 @@ public class Zone {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    private String nom;
+    private String nome;
 
     @Column(name = "code_postal")
     private int codePostal;
