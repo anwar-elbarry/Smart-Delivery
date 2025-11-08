@@ -1,14 +1,13 @@
 package org.example.smart_delivery.service.produit;
 
-import org.example.smart_delivery.dto.ProduitDTO;
+import org.example.smart_delivery.dto.request.ProduitDTO;
 import org.example.smart_delivery.entity.Produit;
-import org.example.smart_delivery.mapper.ProduitMapper;
+import org.example.smart_delivery.mapper.request.ProduitMapper;
 import org.example.smart_delivery.repository.ProduitRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,11 +39,9 @@ public class ProduitServiceImpl implements ProduitService {
     }
 
     @Override
-    public List<ProduitDTO> getAll() {
-        return produitRepository.findAll()
-                .stream()
-                .map(produitMapper::toDto)
-                .collect(Collectors.toList());
+    public Page<ProduitDTO> getAll(Pageable pageable) {
+        return produitRepository.findAll(pageable)
+                .map(produitMapper::toDto);
     }
 
     @Override
