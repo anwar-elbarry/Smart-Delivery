@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 
 @Entity
-@Table(name = "produit")
+@Table(name = "produits")
 public class Produit {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
