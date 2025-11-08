@@ -1,6 +1,6 @@
 package org.example.smart_delivery.service.historique;
 
-import org.example.smart_delivery.dto.HistoriqueLivraisonDTO;
+import org.example.smart_delivery.dto.request.HistoriqueLivraisonDTO;
 import java.util.List;
 
 public interface HistoriqueLivraisonService {

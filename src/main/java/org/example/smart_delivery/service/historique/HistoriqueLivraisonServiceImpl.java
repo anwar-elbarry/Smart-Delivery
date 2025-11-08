@@ -1,8 +1,8 @@
 package org.example.smart_delivery.service.historique;
 
-import org.example.smart_delivery.dto.HistoriqueLivraisonDTO;
+import org.example.smart_delivery.dto.request.HistoriqueLivraisonDTO;
 import org.example.smart_delivery.entity.HistoriqueLivraison;
-import org.example.smart_delivery.mapper.HistoLivrMapper;
+import org.example.smart_delivery.mapper.request.HistoLivrMapper;
 import org.example.smart_delivery.repository.HistoriqueLivraisonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
