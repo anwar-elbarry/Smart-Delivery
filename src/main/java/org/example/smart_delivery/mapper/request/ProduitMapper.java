@@ -1,4 +1,4 @@
-package org.example.smart_delivery.mapper;
+package org.example.smart_delivery.mapper.request;
 
 import org.example.smart_delivery.dto.request.ProduitDTO;
 import org.example.smart_delivery.entity.Produit;

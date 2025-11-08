@@ -1,7 +1,8 @@
-package org.example.smart_delivery.mapper;
+package org.example.smart_delivery.mapper.request;
 
 import org.example.smart_delivery.dto.request.UserDTO;
 import org.example.smart_delivery.entity.User;
+import org.example.smart_delivery.mapper.RefMapper;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
