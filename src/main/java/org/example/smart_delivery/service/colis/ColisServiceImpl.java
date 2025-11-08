@@ -1,13 +1,13 @@
 package org.example.smart_delivery.service.colis;
 
-import org.example.smart_delivery.dto.ColisDTO;
-import org.example.smart_delivery.dto.ColisProduitDTO;
+import org.example.smart_delivery.dto.request.ColisDTO;
+import org.example.smart_delivery.dto.request.ColisProduitDTO;
 import org.example.smart_delivery.entity.*;
 import org.example.smart_delivery.entity.enums.ColisStatus;
 import org.example.smart_delivery.entity.enums.Priority;
 import org.example.smart_delivery.exception.ResourceNotFoundException;
-import org.example.smart_delivery.mapper.ColisMapper;
-import org.example.smart_delivery.mapper.ColisProduitMapper;
+import org.example.smart_delivery.mapper.request.ColisMapper;
+import org.example.smart_delivery.mapper.request.ColisProduitMapper;
 import org.example.smart_delivery.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

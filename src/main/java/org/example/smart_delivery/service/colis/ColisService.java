@@ -1,6 +1,6 @@
 package org.example.smart_delivery.service.colis;
 
-import org.example.smart_delivery.dto.ColisDTO;
+import org.example.smart_delivery.dto.request.ColisDTO;
 import org.example.smart_delivery.entity.enums.ColisStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
