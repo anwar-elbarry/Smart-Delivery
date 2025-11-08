@@ -1,8 +1,8 @@
 package org.example.smart_delivery.service.livreur;
 
-import org.example.smart_delivery.dto.LivreurDTO;
+import org.example.smart_delivery.dto.request.LivreurDTO;
 import org.example.smart_delivery.entity.Livreur;
-import org.example.smart_delivery.mapper.LivreurMapper;
+import org.example.smart_delivery.mapper.request.LivreurMapper;
 import org.example.smart_delivery.repository.LivreurRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
