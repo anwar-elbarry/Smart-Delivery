@@ -1,8 +1,9 @@
 package org.example.smart_delivery.service.user;
 
-import org.example.smart_delivery.dto.UserDTO;
+import org.example.smart_delivery.dto.request.UserDTO;
 import org.example.smart_delivery.entity.User;
-import org.example.smart_delivery.mapper.UserMapper;
+import org.example.smart_delivery.exception.ResourceNotFoundException;
+import org.example.smart_delivery.mapper.request.UserMapper;
 import org.example.smart_delivery.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getById(String id) {
         User entity = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User not found: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found: ", id));
         return userMapper.toDto(entity);
     }
 
@@ -50,7 +51,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(String id) {
         if (!userRepository.existsById(id)) {
-            throw new IllegalArgumentException("User not found: " + id);
+            throw new IllegalArgumentException("User" + id);
         }
         userRepository.deleteById(id);
     }
