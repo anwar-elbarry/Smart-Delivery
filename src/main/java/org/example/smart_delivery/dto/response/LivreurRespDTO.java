@@ -11,7 +11,6 @@ import org.example.smart_delivery.dto.request.ZoneDTO;
 @Setter
 public class LivreurRespDTO {
     private String id;
-    @NotBlank
     private UserDTO user;
     @NotBlank
     @Size(max = 100)
