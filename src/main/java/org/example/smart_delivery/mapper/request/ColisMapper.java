@@ -11,11 +11,13 @@ public interface ColisMapper {
     @Mapping(source = "livreur", target = "livreurId", qualifiedByName = "toIdLivreur")
     @Mapping(source = "clientExpediteur", target = "clientExpediteurId", qualifiedByName = "toId")
     @Mapping(source = "destinataire", target = "destinataireId", qualifiedByName = "toId")
+    @Mapping(source = "zone", target = "zoneId", qualifiedByName = "toIdZone")
     ColisDTO toDto(Colis entity);
 
     @Mapping(source = "livreurId", target = "livreur", qualifiedByName = "toLivreurRef")
     @Mapping(source = "clientExpediteurId", target = "clientExpediteur", qualifiedByName = "toUserRef")
     @Mapping(source = "destinataireId", target = "destinataire", qualifiedByName = "toUserRef")
+    @Mapping(source = "zoneId", target = "zone", qualifiedByName = "toZoneRef")
     @Mapping(target = "colisProduitList", ignore = true)
     Colis toEntity(ColisDTO dto);
 }
