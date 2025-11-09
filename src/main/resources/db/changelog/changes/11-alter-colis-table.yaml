@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 11
+      author: admin
+      changes:
+        - addColumn:
+            tableName: colis
+            columns:
+            - column:
+                 name: id_zone
+                 type: varchar(50)
+            - column:
+                 name: villeDestination
+                 type: varchar(25)
+        - addForeignKeyConstraint:
+            baseTableName: colis
+            baseColumnNames: id_zone
+            constraintName: fk_colis_zone
+            referencedTableName: zone
+            referencedColumnNames: id
+            onDelete: SET NULL
+            onUpdate: CASCADE
