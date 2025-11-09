@@ -7,9 +7,9 @@ import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface ProduitRespMapper {
-    ProduitDTO toDto(Produit entity);
+    ProduitRespDTO toRespDto(Produit entity);
     @Mapping(target = "colisProduitList", ignore = true)
-    Produit toEntity(ProduitRespDTO dto);
+    Produit toRespEntity(ProduitRespDTO dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "colisProduitList", ignore = true)

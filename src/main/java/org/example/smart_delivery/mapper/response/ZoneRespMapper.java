@@ -10,9 +10,9 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring")
 public interface ZoneRespMapper {
-    ZoneDTO toDto(Zone entity);
+    ZoneRespDTO toRespDto(Zone entity);
     Zone toEntity(ZoneRespDTO dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntityFromDto(ZoneRespDTO dto, @MappingTarget Zone entity);
+    void updateRespEntityFromDto(ZoneRespDTO dto, @MappingTarget Zone entity);
 }

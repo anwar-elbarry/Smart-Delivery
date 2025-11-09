@@ -9,8 +9,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring",uses = RefMapper.class)
 public interface HistoLivrRespMapper {
-    @Mapping(source = "colis",target = "colisId",qualifiedByName = "toColisId")
-    HistoriqueLivraisonDTO toDto(HistoriqueLivraison entity);
+    HistoriqueLivraisonRespDTO toRespDto(HistoriqueLivraison entity);
 
-    HistoriqueLivraison toEntity(HistoriqueLivraisonRespDTO dto);
+    HistoriqueLivraison toRespEntity(HistoriqueLivraisonRespDTO dto);
 }
