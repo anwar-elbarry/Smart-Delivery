@@ -6,7 +6,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.smart_delivery.dto.ZoneDTO;
+import org.example.smart_delivery.dto.request.ZoneDTO;
+import org.example.smart_delivery.dto.response.ZoneRespDTO;
 import org.example.smart_delivery.service.zone.ZoneService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +27,8 @@ public class ZoneController {
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
     @PostMapping
-    public ResponseEntity<ZoneDTO> create(@Valid @RequestBody ZoneDTO dto){
-        ZoneDTO created = zoneService.create(dto);
+    public ResponseEntity<ZoneRespDTO> create(@Valid @RequestBody ZoneDTO dto){
+        ZoneRespDTO created = zoneService.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
@@ -37,8 +38,8 @@ public class ZoneController {
             @ApiResponse(responseCode = "404", description = "Zone not found")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<ZoneDTO> update(@PathVariable String id, @Valid @RequestBody ZoneDTO dto) {
-        ZoneDTO updated = zoneService.update(id, dto);
+    public ResponseEntity<ZoneRespDTO> update(@PathVariable String id, @Valid @RequestBody ZoneDTO dto) {
+        ZoneRespDTO updated = zoneService.update(id, dto);
         return ResponseEntity.ok(updated);
     }
 
@@ -48,7 +49,7 @@ public class ZoneController {
             @ApiResponse(responseCode = "404", description = "Zone not found")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<ZoneDTO> getById(@PathVariable String id) {
+    public ResponseEntity<ZoneRespDTO> getById(@PathVariable String id) {
         return ResponseEntity.ok(zoneService.getById(id));
     }
 
@@ -57,7 +58,7 @@ public class ZoneController {
             @ApiResponse(responseCode = "200", description = "Zones returned")
     })
     @GetMapping
-    public ResponseEntity<List<ZoneDTO>> getAll() {
+    public ResponseEntity<List<ZoneRespDTO>> getAll() {
         return ResponseEntity.ok(zoneService.getAll());
     }
 

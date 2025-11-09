@@ -5,8 +5,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.example.smart_delivery.dto.ColisDTO;
-import org.example.smart_delivery.dto.ColisProduitDTO;
+import org.example.smart_delivery.dto.request.ColisDTO;
+import org.example.smart_delivery.dto.response.ColisRespDTO;
 import org.example.smart_delivery.service.colis.ColisService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,8 +35,8 @@ public class ColisController {
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
     @PostMapping
-    public ResponseEntity<ColisDTO> creatColi(@Valid @RequestBody ColisDTO colis){
-        ColisDTO colisDTO = colisService.create(colis);
+    public ResponseEntity<ColisRespDTO> creatColi(@Valid @RequestBody ColisDTO colis){
+        ColisRespDTO colisDTO = colisService.create(colis);
         return ResponseEntity.status(HttpStatus.CREATED).body(colisDTO);
     }
 
@@ -46,8 +46,8 @@ public class ColisController {
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
     @PutMapping("{coliId}")
-    public ResponseEntity<ColisDTO> updateColi(@Valid @RequestBody ColisDTO coli ,@PathVariable String coliId){
-        ColisDTO updated = colisService.update(coliId,coli);
+    public ResponseEntity<ColisRespDTO> updateColi(@Valid @RequestBody ColisDTO coli ,@PathVariable String coliId){
+        ColisRespDTO updated = colisService.update(coliId,coli);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(updated);
     }
 
@@ -63,7 +63,7 @@ public class ColisController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ColisDTO>> getAll(
+    public ResponseEntity<Page<ColisRespDTO>> getAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy,

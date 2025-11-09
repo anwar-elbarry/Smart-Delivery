@@ -5,7 +5,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.example.smart_delivery.dto.ProduitDTO;
+import org.example.smart_delivery.dto.request.ProduitDTO;
+import org.example.smart_delivery.dto.response.ProduitRespDTO;
 import org.example.smart_delivery.service.produit.ProduitService;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -28,8 +29,8 @@ public class ProduitController {
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
     @PostMapping
-    public ResponseEntity<ProduitDTO> create(@Validated @RequestBody ProduitDTO produitDTO){
-        ProduitDTO created =  produitService.create(produitDTO);
+    public ResponseEntity<ProduitRespDTO> create(@Validated @RequestBody ProduitDTO produitDTO){
+        ProduitRespDTO created =  produitService.create(produitDTO);
         return  ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
@@ -39,9 +40,9 @@ public class ProduitController {
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
     @GetMapping
-    public ResponseEntity<Page<ProduitDTO>> getAll(@ParameterObject Pageable pageable){
+    public ResponseEntity<Page<ProduitRespDTO>> getAll(@ParameterObject Pageable pageable){
 
-        Page<ProduitDTO> page = produitService.getAll(pageable);
+        Page<ProduitRespDTO> page = produitService.getAll(pageable);
         return ResponseEntity.ok(page);
     }
 
@@ -51,8 +52,8 @@ public class ProduitController {
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
     @PutMapping({"{produitId}"})
-    public ResponseEntity<ProduitDTO> update(@Validated @PathVariable String produitId , @RequestBody ProduitDTO produitDTO){
-        ProduitDTO updated =  produitService.update(produitId,produitDTO);
+    public ResponseEntity<ProduitRespDTO> update(@Validated @PathVariable String produitId , @RequestBody ProduitDTO produitDTO){
+        ProduitRespDTO updated =  produitService.update(produitId,produitDTO);
         return  ResponseEntity.status(HttpStatus.ACCEPTED).body(updated);
     }
 
@@ -62,8 +63,8 @@ public class ProduitController {
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
     @GetMapping("{produitId}")
-    public ResponseEntity<ProduitDTO> getProduit(@PathVariable String produitId){
-        ProduitDTO produitDTO = produitService.getById(produitId);
+    public ResponseEntity<ProduitRespDTO> getProduit(@PathVariable String produitId){
+        ProduitRespDTO produitDTO = produitService.getById(produitId);
         return ResponseEntity.ok(produitDTO);
     }
 
@@ -73,7 +74,7 @@ public class ProduitController {
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
     @DeleteMapping("{produitId}")
-    public ResponseEntity<ProduitDTO> delete(@PathVariable String produitId){
+    public ResponseEntity<ProduitRespDTO> delete(@PathVariable String produitId){
         produitService.delete(produitId);
         return ResponseEntity.noContent().build();
     }

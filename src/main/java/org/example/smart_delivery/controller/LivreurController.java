@@ -6,7 +6,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.smart_delivery.dto.LivreurDTO;
+import org.example.smart_delivery.dto.request.LivreurDTO;
+import org.example.smart_delivery.dto.response.LivreurRespDTO;
 import org.example.smart_delivery.service.livreur.LivreurService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +27,8 @@ public class LivreurController {
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
     @PostMapping
-    public ResponseEntity<LivreurDTO> create(@Valid @RequestBody LivreurDTO dto){
-        LivreurDTO created = livreurService.create(dto);
+    public ResponseEntity<LivreurRespDTO> create(@Valid @RequestBody LivreurDTO dto){
+        LivreurRespDTO created = livreurService.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
@@ -37,8 +38,8 @@ public class LivreurController {
             @ApiResponse(responseCode = "404", description = "Livreur not found")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<LivreurDTO> update(@PathVariable String id, @Valid @RequestBody LivreurDTO dto) {
-        LivreurDTO updated = livreurService.update(id, dto);
+    public ResponseEntity<LivreurRespDTO> update(@PathVariable String id, @Valid @RequestBody LivreurDTO dto) {
+        LivreurRespDTO updated = livreurService.update(id, dto);
         return ResponseEntity.ok(updated);
     }
 
@@ -48,7 +49,7 @@ public class LivreurController {
             @ApiResponse(responseCode = "404", description = "Livreur not found")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<LivreurDTO> getById(@PathVariable String id) {
+    public ResponseEntity<LivreurRespDTO> getById(@PathVariable String id) {
         return ResponseEntity.ok(livreurService.getById(id));
     }
 
@@ -57,7 +58,7 @@ public class LivreurController {
             @ApiResponse(responseCode = "200", description = "Livreurs returned")
     })
     @GetMapping
-    public ResponseEntity<List<LivreurDTO>> getAll() {
+    public ResponseEntity<List<LivreurRespDTO>> getAll() {
         return ResponseEntity.ok(livreurService.getAll());
     }
 

@@ -6,7 +6,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.smart_delivery.dto.UserDTO;
+import org.example.smart_delivery.dto.request.UserDTO;
+import org.example.smart_delivery.dto.response.UserRespDTO;
 import org.example.smart_delivery.service.user.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +28,8 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
     @PostMapping
-    public ResponseEntity<UserDTO> create(@Valid @RequestBody UserDTO dto){
-        UserDTO created = userService.create(dto);
+    public ResponseEntity<UserRespDTO> create(@Valid @RequestBody UserDTO dto){
+        UserRespDTO created = userService.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
@@ -38,8 +39,8 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> update(@PathVariable String id, @Valid @RequestBody UserDTO dto) {
-        UserDTO updated = userService.update(id, dto);
+    public ResponseEntity<UserRespDTO> update(@PathVariable String id, @Valid @RequestBody UserDTO dto) {
+        UserRespDTO updated = userService.update(id, dto);
         return ResponseEntity.ok(updated);
     }
 
@@ -49,7 +50,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getById(@PathVariable String id) {
+    public ResponseEntity<UserRespDTO> getById(@PathVariable String id) {
         return ResponseEntity.ok(userService.getById(id));
     }
 
@@ -58,7 +59,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Users returned")
     })
     @GetMapping
-    public ResponseEntity<List<UserDTO>> getAll() {
+    public ResponseEntity<List<UserRespDTO>> getAll() {
         return ResponseEntity.ok(userService.getAll());
     }
 
