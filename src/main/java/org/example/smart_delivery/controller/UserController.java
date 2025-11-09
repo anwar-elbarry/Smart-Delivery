@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.example.smart_delivery.dto.request.UserDTO;
 import org.example.smart_delivery.dto.response.UserRespDTO;
 import org.example.smart_delivery.service.user.UserService;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -72,5 +75,10 @@ public class UserController {
     public ResponseEntity<Void> delete(@PathVariable String id) {
         userService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<UserRespDTO>> search(@RequestParam String q, @ParameterObject Pageable pageable) {
+        return ResponseEntity.ok(userService.search(q, pageable));
     }
 }
