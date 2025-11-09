@@ -103,13 +103,17 @@ public class ColisServiceImpl implements ColisService {
         BigDecimal poids = BigDecimal.valueOf(produits.stream().mapToDouble(Produit::getPoids).sum());
 
         List<String> produitsname = produits.stream().map(Produit::getNom).toList();
+        String produitsApercu = produitsname.size() > 5
+                ? String.join(", ", produitsname.subList(0, 5)) + ", ..."
+                : String.join(", ", produitsname);
 
 
         String description = String.format(
-                "Colis de l'expéditeur %s vers le destinataire %s — %d produit(s) — poids total : %.2f g",
+                "Colis de l'expéditeur %s vers le destinataire %s — %d produit(s) (%s) — poids total : %.2f g",
                 exped.getNom()+" "+exped.getPrenom(),
                 disten.getNom()+" "+disten.getPrenom() ,
                 produits.size(),
+                produitsApercu,
                 poids
         );
 
