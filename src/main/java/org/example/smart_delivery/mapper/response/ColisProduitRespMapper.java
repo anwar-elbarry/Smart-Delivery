@@ -9,8 +9,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = RefMapper.class)
 public interface ColisProduitRespMapper {
-    @Mapping(source = "colis",target = "colisId",qualifiedByName = "toColisId")
-    @Mapping(source = "produit",target = "produitId",qualifiedByName = "toProduitId")
-    ColisProduitDTO toDto(ColisProduit entity);
-    ColisProduit toEntity(ColisProduitRespDTO dto);
+
+    ColisProduitRespDTO toRespDto(ColisProduit entity);
+    ColisProduit toRespEntity(ColisProduitRespDTO dto);
 }
