@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.smart_delivery.dto.request.LivreurDTO;
 import org.example.smart_delivery.dto.request.UserDTO;
+import org.example.smart_delivery.dto.request.ZoneDTO;
+import org.example.smart_delivery.entity.Zone;
 import org.example.smart_delivery.entity.enums.ColisStatus;
 import org.example.smart_delivery.entity.enums.Priority;
 import org.springframework.lang.Nullable;
@@ -28,6 +30,10 @@ public class ColisRespDTO {
 
     @NotNull
     private Priority priorite;
+
+    private String villeDestination;
+
+    private ZoneDTO zone;
 
     private LivreurDTO livreur;
 
