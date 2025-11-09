@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import org.example.smart_delivery.dto.request.ColisDTO;
 import org.example.smart_delivery.dto.response.ColisRespDTO;
 import org.example.smart_delivery.service.colis.ColisService;
+import org.example.smart_delivery.service.colis.Colisfilter;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -87,6 +89,18 @@ public class ColisController {
     {
     colisService.createColisRequest(expedId,distenId,produitIds);
     return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Filter colis")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Coli filtred"),
+            @ApiResponse(responseCode = "400", description = "Validation error")
+    })
+    @GetMapping("/filter")
+    public ResponseEntity <Page<ColisRespDTO>> filter(
+            @RequestParam Colisfilter colisfilter,
+            @ParameterObject Pageable pageable){
+        return  ResponseEntity.ok(colisService.filter(colisfilter,pageable));
     }
 
 }
