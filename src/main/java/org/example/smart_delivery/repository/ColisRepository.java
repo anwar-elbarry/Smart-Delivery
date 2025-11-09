@@ -4,6 +4,7 @@ import org.example.smart_delivery.entity.Colis;
 import org.example.smart_delivery.entity.Zone;
 import org.example.smart_delivery.entity.enums.ColisStatus;
 import org.example.smart_delivery.entity.enums.Priority;
+import org.example.smart_delivery.service.colis.Coliscounter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -37,4 +38,11 @@ public interface ColisRepository extends JpaRepository<Colis, String> {
     or c.id like concat('%', :q, '%')
 """)
     Page<Colis> search(@Param("q") String q, Pageable pageable);
+
+    List<Colis> findColisByLivreurId(String livreurId);
+
+    // replace calcule() with this per-livreur aggregate:
+    @Query("select new org.example.smart_delivery.service.colis.Coliscounter(count(c), coalesce(sum(c.poids), 0)) " +
+            "from Colis c where c.livreur.id = :livreurId")
+    Coliscounter aggregateByLivreurId(@Param("livreurId") String livreurId);
 }
