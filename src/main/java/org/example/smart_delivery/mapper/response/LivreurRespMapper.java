@@ -9,12 +9,12 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring",uses = RefMapper.class)
 public interface LivreurRespMapper {
-    @Mapping(source = "zoneAssigne", target = "zoneAssignee", qualifiedByName = "toIdZone")
-    @Mapping(source = "user", target = "user", qualifiedByName = "toId")
+    @Mapping(source = "zoneAssigne", target = "zoneAssignee")
+    @Mapping(source = "user", target = "user")
     LivreurRespDTO toRespDto(Livreur entity);
 
-    @Mapping(source = "zoneAssignee", target = "zoneAssigne", qualifiedByName = "toZoneRef")
-    @Mapping(source = "user", target = "user", qualifiedByName = "toUserRef")
+    @Mapping(source = "zoneAssignee", target = "zoneAssigne")
+    @Mapping(source = "user", target = "user")
     @Mapping(target = "colisList", ignore = true)
     Livreur toRespEntity(LivreurRespDTO dto);
 }
