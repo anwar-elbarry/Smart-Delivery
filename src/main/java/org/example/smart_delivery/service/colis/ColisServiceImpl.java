@@ -1,5 +1,6 @@
 package org.example.smart_delivery.service.colis;
 
+import ch.qos.logback.core.util.COWArrayList;
 import org.example.smart_delivery.dto.request.ColisDTO;
 import org.example.smart_delivery.dto.request.ColisProduitDTO;
 import org.example.smart_delivery.dto.response.ColisRespDTO;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -172,5 +174,10 @@ public class ColisServiceImpl implements ColisService {
     @Override
     public Page<ColisRespDTO> search(String q, Pageable pageable) {
         return colisRepository.search(q,pageable).map(colisRespMapper::toRespDto);
+    }
+
+    @Override
+    public Coliscounter calcule(String livreurId) {
+        return colisRepository.aggregateByLivreurId(livreurId);
     }
 }

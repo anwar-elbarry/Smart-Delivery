@@ -2,6 +2,7 @@ package org.example.smart_delivery.service.colis;
 
 import org.example.smart_delivery.dto.request.ColisDTO;
 import org.example.smart_delivery.dto.response.ColisRespDTO;
+import org.example.smart_delivery.entity.Zone;
 import org.example.smart_delivery.entity.enums.ColisStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,4 +21,6 @@ public interface ColisService {
     void createColisRequest(String expedId , String distenId,List<String> produitIds);
 
     Page<ColisRespDTO> search(String q, Pageable pageable);
+
+    Coliscounter calcule(String livreurId);
 }
