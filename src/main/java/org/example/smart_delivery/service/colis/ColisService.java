@@ -16,6 +16,6 @@ public interface ColisService {
     void delete(String id);
     void Assign_col(String colisId, String livreurId);
 
-    Page<ColisRespDTO>filterByStatus(ColisStatus status,Pageable pageable);
+    Page<ColisRespDTO>filter(Colisfilter colisfilter,Pageable pageable);
     void createColisRequest(String expedId , String distenId,List<String> produitIds);
 }

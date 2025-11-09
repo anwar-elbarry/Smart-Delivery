@@ -31,6 +31,7 @@ public class ColisServiceImpl implements ColisService {
     private final ColisProduitRepository colisProduitRepository;
     private final ColisProduitMapper colisProduitMapper;
     private final ColisRespMapper colisRespMapper;
+    private final ZoneRepository zoneRepository;
 
     @Override
     public ColisRespDTO create(ColisDTO dto) {
@@ -85,8 +86,35 @@ public class ColisServiceImpl implements ColisService {
     }
 
     @Override
-    public Page<ColisRespDTO> filterByStatus(ColisStatus status,Pageable pageable) {
-        return  colisRepository.findColisByStatut(status,pageable).map(colisRespMapper::toRespDto);
+    public Page<ColisRespDTO> filter(Colisfilter colisfilter,Pageable pageable) {
+        if (colisfilter == null) {
+            return colisRepository.findAll(pageable).map(colisRespMapper::toRespDto);
+        }
+
+        // Filter by zone
+        if (colisfilter.getZoneId() != null && !colisfilter.getZoneId().isBlank()) {
+            Zone zone = zoneRepository.findById(colisfilter.getZoneId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Zone", colisfilter.getZoneId()));
+            return colisRepository
+                    .findColisByZone(zone, pageable)
+                    .map(colisRespMapper::toRespDto);
+        }
+
+        // Filter by status
+        if (colisfilter.getStatus() != null) {
+            return colisRepository
+                    .findColisByStatut(colisfilter.getStatus(), pageable)
+                    .map(colisRespMapper::toRespDto);
+        }
+
+        // Filter by priority
+        if (colisfilter.getPriority() != null) {
+            return colisRepository
+                    .findColisByPriorite(colisfilter.getPriority(), pageable)
+                    .map(colisRespMapper::toRespDto);
+        }
+
+        return colisRepository.findAll(pageable).map(colisRespMapper::toRespDto);
     }
     @Override
     public void createColisRequest(String expedId , String distenId,List<String> produitIds){
