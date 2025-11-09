@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.smart_delivery.entity.Zone;
 import org.example.smart_delivery.entity.enums.ColisStatus;
 import org.example.smart_delivery.entity.enums.Priority;
 import org.springframework.lang.Nullable;
@@ -25,6 +26,12 @@ public class ColisDTO {
 
     @NotNull
     private Priority priorite;
+
+    private String villeDestination;
+
+    @Size(max = 50)
+    @Nullable
+    private String zoneId;
 
     @Size(max = 50)
     @Nullable
