@@ -1,6 +1,5 @@
 package org.example.smart_delivery.mapper.response;
 
-import org.example.smart_delivery.dto.request.ColisDTO;
 import org.example.smart_delivery.dto.response.ColisRespDTO;
 import org.example.smart_delivery.entity.Colis;
 import org.example.smart_delivery.mapper.RefMapper;

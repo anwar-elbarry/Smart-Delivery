@@ -1,6 +1,5 @@
 package org.example.smart_delivery.mapper.response;
 
-import org.example.smart_delivery.dto.request.ZoneDTO;
 import org.example.smart_delivery.dto.response.ZoneRespDTO;
 import org.example.smart_delivery.entity.Zone;
 import org.mapstruct.BeanMapping;

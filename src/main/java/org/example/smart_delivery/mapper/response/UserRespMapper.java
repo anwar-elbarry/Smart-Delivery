@@ -1,6 +1,5 @@
 package org.example.smart_delivery.mapper.response;
 
-import org.example.smart_delivery.dto.request.UserDTO;
 import org.example.smart_delivery.dto.response.UserRespDTO;
 import org.example.smart_delivery.entity.User;
 import org.example.smart_delivery.mapper.RefMapper;
