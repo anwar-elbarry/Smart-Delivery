@@ -24,6 +24,11 @@ public class Colis {
     private BigDecimal poids;
     private ColisStatus statut;
     private Priority priorite;
+    private String villeDestination;
+
+    @OneToOne
+    @JoinColumn(name = "id_zone")
+    private Zone zone;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "livreur_id")
