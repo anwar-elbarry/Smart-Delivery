@@ -19,3 +19,5 @@ databaseChangeLog:
       file: db/changelog/changes/09-alter-colis-description-255.yaml
   - include:
       file: db/changelog/changes/10-alter-colis_prosduit-add-id.yaml
+  - include:
+      file: db/changelog/changes/11-alter-colis-table.yaml
