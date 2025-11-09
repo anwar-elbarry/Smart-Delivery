@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.example.smart_delivery.dto.request.ColisDTO;
 import org.example.smart_delivery.dto.response.ColisRespDTO;
 import org.example.smart_delivery.service.colis.ColisService;
+import org.example.smart_delivery.service.colis.Coliscounter;
 import org.example.smart_delivery.service.colis.Colisfilter;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -110,6 +111,19 @@ public class ColisController {
     @GetMapping("/search")
     public ResponseEntity<Page<ColisRespDTO>> search(@RequestParam String q, @ParameterObject Pageable pageable) {
         return ResponseEntity.ok(colisService.search(q, pageable));
+    }
+
+    @Operation(summary = "calcule colis livreur")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "calculated"),
+            @ApiResponse(responseCode = "400", description = "Validation error")
+    })
+    @GetMapping("/calcule")
+    public ResponseEntity<Coliscounter> calcule(
+            @RequestParam String livreurId
+    ){
+        return ResponseEntity.ok(colisService.calcule(livreurId));
+
     }
 
 }
