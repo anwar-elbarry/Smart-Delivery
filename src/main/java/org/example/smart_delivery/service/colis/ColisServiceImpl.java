@@ -2,12 +2,14 @@ package org.example.smart_delivery.service.colis;
 
 import org.example.smart_delivery.dto.request.ColisDTO;
 import org.example.smart_delivery.dto.request.ColisProduitDTO;
+import org.example.smart_delivery.dto.response.ColisRespDTO;
 import org.example.smart_delivery.entity.*;
 import org.example.smart_delivery.entity.enums.ColisStatus;
 import org.example.smart_delivery.entity.enums.Priority;
 import org.example.smart_delivery.exception.ResourceNotFoundException;
 import org.example.smart_delivery.mapper.request.ColisMapper;
 import org.example.smart_delivery.mapper.request.ColisProduitMapper;
+import org.example.smart_delivery.mapper.response.ColisRespMapper;
 import org.example.smart_delivery.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,38 +30,39 @@ public class ColisServiceImpl implements ColisService {
     private final ProduitRepository produitRepository;
     private final ColisProduitRepository colisProduitRepository;
     private final ColisProduitMapper colisProduitMapper;
+    private final ColisRespMapper colisRespMapper;
 
     @Override
-    public ColisDTO create(ColisDTO dto) {
+    public ColisRespDTO create(ColisDTO dto) {
         Colis entity = colisMapper.toEntity(dto);
         entity.setLivreur(null);
         entity.setStatut(ColisStatus.CREATED);
         Colis saved = colisRepository.save(entity);
-        return colisMapper.toDto(saved);
+        return colisRespMapper.toRespDto(saved);
     }
 
     @Override
-    public ColisDTO update(String id, ColisDTO dto) {
+    public ColisRespDTO update(String id, ColisDTO dto) {
         if (!colisRepository.existsById(id)) {
             throw new ResourceNotFoundException("Colis",id);
         }
         Colis entity = colisMapper.toEntity(dto);
         entity.setId(id);
         Colis saved = colisRepository.save(entity);
-        return colisMapper.toDto(saved);
+        return colisRespMapper.toRespDto(saved);
     }
 
     @Override
-    public ColisDTO getById(String id) {
+    public ColisRespDTO getById(String id) {
         Colis entity = colisRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Colis",id));
-        return colisMapper.toDto(entity);
+        return colisRespMapper.toRespDto(entity);
     }
 
     @Override
-    public Page<ColisDTO> getAll(Pageable pageable) {
+    public Page<ColisRespDTO> getAll(Pageable pageable) {
         return colisRepository.findAll(pageable)
-                .map(colisMapper::toDto);
+                .map(colisRespMapper::toRespDto);
     }
 
     @Override
@@ -82,8 +85,8 @@ public class ColisServiceImpl implements ColisService {
     }
 
     @Override
-    public Page<ColisDTO> filterByStatus(ColisStatus status,Pageable pageable) {
-        return  colisRepository.findColisByStatut(status,pageable).map(colisMapper::toDto);
+    public Page<ColisRespDTO> filterByStatus(ColisStatus status,Pageable pageable) {
+        return  colisRepository.findColisByStatut(status,pageable).map(colisRespMapper::toRespDto);
     }
     @Override
     public void createColisRequest(String expedId , String distenId,List<String> produitIds){
