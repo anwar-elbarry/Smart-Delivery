@@ -102,5 +102,14 @@ public class ColisController {
             @ParameterObject Pageable pageable){
         return  ResponseEntity.ok(colisService.filter(colisfilter,pageable));
     }
+    @Operation(summary = "search colis")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Coli searched"),
+            @ApiResponse(responseCode = "400", description = "Validation error")
+    })
+    @GetMapping("/search")
+    public ResponseEntity<Page<ColisRespDTO>> search(@RequestParam String q, @ParameterObject Pageable pageable) {
+        return ResponseEntity.ok(colisService.search(q, pageable));
+    }
 
 }
