@@ -1,9 +1,11 @@
 package org.example.smart_delivery.service.user;
 
 import org.example.smart_delivery.dto.request.UserDTO;
+import org.example.smart_delivery.dto.response.UserRespDTO;
 import org.example.smart_delivery.entity.User;
 import org.example.smart_delivery.exception.ResourceNotFoundException;
 import org.example.smart_delivery.mapper.request.UserMapper;
+import org.example.smart_delivery.mapper.response.UserRespMapper;
 import org.example.smart_delivery.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,35 +18,36 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final UserRespMapper userRespMapper;
 
     @Override
-    public UserDTO create(UserDTO dto) {
+    public UserRespDTO create(UserDTO dto) {
         User entity = userMapper.toEntity(dto);
         User saved = userRepository.save(entity);
-        return userMapper.toDto(saved);
+        return userRespMapper.toRespDto(saved);
     }
 
     @Override
-    public UserDTO update(String id, UserDTO dto) {
+    public UserRespDTO update(String id, UserDTO dto) {
         User entity = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: " + id));
         userMapper.updateEntityFromDto(dto, entity);
         User saved = userRepository.save(entity);
-        return userMapper.toDto(saved);
+        return userRespMapper.toRespDto(saved);
     }
 
     @Override
-    public UserDTO getById(String id) {
+    public UserRespDTO getById(String id) {
         User entity = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found: ", id));
-        return userMapper.toDto(entity);
+        return userRespMapper.toRespDto(entity);
     }
 
     @Override
-    public List<UserDTO> getAll() {
+    public List<UserRespDTO> getAll() {
         return userRepository.findAll()
                 .stream()
-                .map(userMapper::toDto)
+                .map(userRespMapper::toRespDto)
                 .collect(Collectors.toList());
     }
 
