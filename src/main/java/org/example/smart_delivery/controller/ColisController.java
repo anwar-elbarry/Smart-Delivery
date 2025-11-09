@@ -53,7 +53,7 @@ public class ColisController {
 
     @Operation(summary = "assign coli to livreur")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Coli assigned"),
+            @ApiResponse(responseCode = "204", description = "Coli assigned"),
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
     @PutMapping("/assign")
