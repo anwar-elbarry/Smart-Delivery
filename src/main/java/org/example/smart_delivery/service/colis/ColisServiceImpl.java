@@ -168,4 +168,9 @@ public class ColisServiceImpl implements ColisService {
             colisProduitRepository.save(cpEntity);
         }
     }
+
+    @Override
+    public Page<ColisRespDTO> search(String q, Pageable pageable) {
+        return colisRepository.search(q,pageable).map(colisRespMapper::toRespDto);
+    }
 }

@@ -18,4 +18,6 @@ public interface ColisService {
 
     Page<ColisRespDTO>filter(Colisfilter colisfilter,Pageable pageable);
     void createColisRequest(String expedId , String distenId,List<String> produitIds);
+
+    Page<ColisRespDTO> search(String q, Pageable pageable);
 }
