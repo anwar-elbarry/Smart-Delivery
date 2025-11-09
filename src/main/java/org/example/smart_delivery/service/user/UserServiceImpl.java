@@ -8,6 +8,8 @@ import org.example.smart_delivery.mapper.request.UserMapper;
 import org.example.smart_delivery.mapper.response.UserRespMapper;
 import org.example.smart_delivery.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,5 +59,10 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("User" + id);
         }
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<UserRespDTO> search(String q, Pageable pageable) {
+        return userRepository.search(q, pageable).map(userRespMapper::toRespDto);
     }
 }

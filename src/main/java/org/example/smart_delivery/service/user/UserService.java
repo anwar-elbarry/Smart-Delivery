@@ -2,6 +2,8 @@ package org.example.smart_delivery.service.user;
 
 import org.example.smart_delivery.dto.request.UserDTO;
 import org.example.smart_delivery.dto.response.UserRespDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -11,4 +13,5 @@ public interface UserService {
     UserRespDTO getById(String id);
     List<UserRespDTO> getAll();
     void delete(String id);
+    Page<UserRespDTO> search(String q, Pageable pageable);
 }
