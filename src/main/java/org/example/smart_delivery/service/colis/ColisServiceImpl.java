@@ -3,6 +3,7 @@ package org.example.smart_delivery.service.colis;
 import ch.qos.logback.core.util.COWArrayList;
 import org.example.smart_delivery.dto.request.ColisDTO;
 import org.example.smart_delivery.dto.request.ColisProduitDTO;
+import org.example.smart_delivery.dto.request.HistoriqueLivraisonDTO;
 import org.example.smart_delivery.dto.response.ColisRespDTO;
 import org.example.smart_delivery.entity.*;
 import org.example.smart_delivery.entity.enums.ColisStatus;
@@ -10,7 +11,9 @@ import org.example.smart_delivery.entity.enums.Priority;
 import org.example.smart_delivery.exception.ResourceNotFoundException;
 import org.example.smart_delivery.mapper.request.ColisMapper;
 import org.example.smart_delivery.mapper.request.ColisProduitMapper;
+import org.example.smart_delivery.mapper.request.HistoLivrMapper;
 import org.example.smart_delivery.mapper.response.ColisRespMapper;
+import org.example.smart_delivery.mapper.response.HistoLivrRespMapper;
 import org.example.smart_delivery.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -33,7 +36,9 @@ public class ColisServiceImpl implements ColisService {
     private final ColisProduitRepository colisProduitRepository;
     private final ColisProduitMapper colisProduitMapper;
     private final ColisRespMapper colisRespMapper;
+    private final HistoLivrMapper histoLivrMapper;
     private final ZoneRepository zoneRepository;
+    private final HistoriqueLivraisonRepository historiqueLivraisonRepository;
 
     @Override
     public ColisRespDTO create(ColisDTO dto) {
@@ -41,6 +46,12 @@ public class ColisServiceImpl implements ColisService {
         entity.setLivreur(null);
         entity.setStatut(ColisStatus.CREATED);
         Colis saved = colisRepository.save(entity);
+        HistoriqueLivraisonDTO historiqueLivraisonDTO = new HistoriqueLivraisonDTO();
+        historiqueLivraisonDTO.setColisId(saved.getId());
+        historiqueLivraisonDTO.setStatut(ColisStatus.CREATED);
+        historiqueLivraisonDTO.setDateChangement(LocalDateTime.now());
+        historiqueLivraisonDTO.setCommentaire("create colis");
+        historiqueLivraisonRepository.save(histoLivrMapper.toEntity(historiqueLivraisonDTO));
         return colisRespMapper.toRespDto(saved);
     }
 
