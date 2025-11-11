@@ -272,7 +272,23 @@ public class ColisServiceTest {
         verify(colisRepository,never()).findColisByStatut(any(),any());
         verify(colisRepository,never()).findColisByStatut(any(),any());
 
+    }
 
+    @Test
+    @DisplayName("search colis with success")
+    void testSearchColis_WithSuccess(){
+        Pageable pageable = PageRequest.of(0,4,Sort.by("id").ascending());
+        Page<Colis> colisPage = new PageImpl<>(List.of(savedColis),pageable,1);
+
+        when(colisRepository.search("q",pageable)).thenReturn(colisPage);
+        when(colisRespMapper.toRespDto(savedColis)).thenReturn(expectedResponse);
+
+        Page<ColisRespDTO> result = colisService.search("q",pageable);
+
+        assertThat(result.getContent()).isEqualTo(List.of(expectedResponse));
+
+        verify(colisRepository).search("q",pageable);
+        verify(colisRespMapper).toRespDto(savedColis);
     }
 
 }
