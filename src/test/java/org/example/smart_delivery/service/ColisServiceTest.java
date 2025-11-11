@@ -15,6 +15,7 @@ import org.example.smart_delivery.mapper.request.HistoLivrMapper;
 import org.example.smart_delivery.mapper.response.ColisRespMapper;
 import org.example.smart_delivery.repository.*;
 import org.example.smart_delivery.service.colis.ColisServiceImpl;
+import org.example.smart_delivery.service.colis.Coliscounter;
 import org.example.smart_delivery.service.colis.Colisfilter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,6 +30,7 @@ import org.springframework.data.domain.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -289,6 +291,28 @@ public class ColisServiceTest {
 
         verify(colisRepository).search("q",pageable);
         verify(colisRespMapper).toRespDto(savedColis);
+    }
+
+    @Test
+    @DisplayName("calcule coli's poids..etc with Success")
+    void testCalcule(){
+        Coliscounter coliscounter = Coliscounter.builder()
+                .count(5L)
+                .poids(BigDecimal.valueOf(32.4))
+                .build();
+
+        String livreurId = UUID.randomUUID().toString();
+
+        when(livreurRepository.existsById(livreurId)).thenReturn(true);
+        when(colisRepository.aggregateByLivreurId(livreurId)).thenReturn(coliscounter);
+
+        Coliscounter result = colisService.calcule(livreurId);
+
+        assertThat(result.getCount()).isEqualTo(5L);
+
+        verify(livreurRepository).existsById(livreurId);
+        verify(colisRepository).aggregateByLivreurId(livreurId);
+
     }
 
 }
