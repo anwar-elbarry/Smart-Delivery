@@ -180,6 +180,10 @@ public class ColisServiceImpl implements ColisService {
 
     @Override
     public Coliscounter calcule(String livreurId) {
+        if (!livreurRepository.existsById(livreurId)){
+            throw new ResourceNotFoundException("Livreur", livreurId);
+        }
+
         return colisRepository.aggregateByLivreurId(livreurId);
     }
 
