@@ -54,7 +54,10 @@ public class ColisServiceImpl implements ColisService {
 
     @Override
     public ColisRespDTO update(String id, ColisDTO dto) {
-        this.checkIfColisExist(id);
+        if (!colisRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Colis",id);
+        }
+
         Colis entity = colisMapper.toEntity(dto);
         entity.setId(id);
         Colis saved = colisRepository.save(entity);
