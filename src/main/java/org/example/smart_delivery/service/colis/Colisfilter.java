@@ -1,9 +1,12 @@
 package org.example.smart_delivery.service.colis;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.example.smart_delivery.entity.enums.ColisStatus;
 import org.example.smart_delivery.entity.enums.Priority;
+
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 public class Colisfilter {
