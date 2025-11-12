@@ -318,7 +318,9 @@ public class ColisServiceTest {
         verify(colisRepository).findColisByStatut(colisfilter.getStatus(),pageable);
         verify(colisRepository,never()).findColisByZone(any(),any());
 
-    }    @Test
+    }
+
+    @Test
     @DisplayName("filter colis By Zone with success")
     void testFilterByZone_WithSuccess(){
         Colisfilter colisfilter =  Colisfilter.builder()
@@ -347,6 +349,60 @@ public class ColisServiceTest {
         verify(colisRepository,never()).findColisByPriorite(any(),any());
         verify(colisRepository,never()).findColisByStatut(any(),any());
         verify(colisRepository).findColisByZone(zone,pageable);
+
+    }
+
+    @Test
+    @DisplayName("filter colis with Error First")
+    void testFilter_WithErrorFirst(){
+        Colisfilter colisfilter =  Colisfilter.builder()
+                .build();
+
+        Pageable pageable = PageRequest.of(0,4,Sort.by("id").ascending());
+        Page<Colis> colisPage = new PageImpl<>(List.of(savedColis),pageable,1);
+
+
+        when(colisRepository.findAll(pageable)).thenReturn(colisPage);
+        when(colisRespMapper.toRespDto(savedColis)).thenReturn(expectedResponse);
+
+        Page<ColisRespDTO> result =  colisService.filter(null,pageable);
+
+        assertThat(result.getContent()).isEqualTo(List.of(expectedResponse));
+        assertThat(colisfilter.getZoneId()).isNull();
+        assertThat(colisfilter.getStatus()).isNull();
+        assertThat(colisfilter.getPriority()).isNull();
+
+        verify(colisRepository).findAll(pageable);
+        verify(colisRepository,never()).findColisByPriorite(any(),any());
+        verify(colisRepository,never()).findColisByStatut(any(),any());
+        verify(colisRepository,never()).findColisByZone(any(),any());
+
+    }
+
+    @Test
+    @DisplayName("filter colis with Error Last")
+    void testFilter_WithErrorLast(){
+        Colisfilter colisfilter =  Colisfilter.builder()
+                .build();
+
+        Pageable pageable = PageRequest.of(0,4,Sort.by("id").ascending());
+        Page<Colis> colisPage = new PageImpl<>(List.of(savedColis),pageable,1);
+
+
+        when(colisRepository.findAll(pageable)).thenReturn(colisPage);
+        when(colisRespMapper.toRespDto(savedColis)).thenReturn(expectedResponse);
+
+        Page<ColisRespDTO> result =  colisService.filter(colisfilter,pageable);
+
+        assertThat(result.getContent()).isEqualTo(List.of(expectedResponse));
+        assertThat(colisfilter.getZoneId()).isNull();
+        assertThat(colisfilter.getStatus()).isNull();
+        assertThat(colisfilter.getPriority()).isNull();
+
+        verify(colisRepository).findAll(pageable);
+        verify(colisRepository,never()).findColisByPriorite(any(),any());
+        verify(colisRepository,never()).findColisByStatut(any(),any());
+        verify(colisRepository,never()).findColisByZone(any(),any());
 
     }
 
