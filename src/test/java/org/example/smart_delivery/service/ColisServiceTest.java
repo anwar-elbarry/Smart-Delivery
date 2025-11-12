@@ -401,4 +401,77 @@ public class ColisServiceTest {
         verify(colisProduitRepository).save(mappedCp);
     }
 
+    @Test
+    @DisplayName("create colis request with Error expediteur")
+    void testCreateColisRequest_WithErrorExp() {
+        String expedId = "exp-1";
+        String distId = "dist-1";
+        String prodId = "prod-1";
+
+
+        when(userRepository.findById(expedId)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> colisService.createColisRequest(expedId, distId, List.of(prodId)))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("User not found with id: " + expedId);
+
+        verify(userRepository).findById(expedId);
+        verify(userRepository, never()).findById(distId);
+        verify(produitRepository, never()).findById(anyString());
+        verify(colisMapper, never()).toEntity(any());
+        verify(colisRepository, never()).save(any());
+        verify(colisProduitMapper, never()).toEntity(any());
+        verify(colisProduitRepository, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("create colis request with Error Distenataire")
+    void testCreateColisRequest_WithErrorDist() {
+        String expedId = "exp-1";
+        String distId = "dist-1";
+        String prodId = "prod-1";
+        User exped = User.builder().id(expedId).nom("Jean").prenom("Dupont").build();
+
+        when(userRepository.findById(distId)).thenReturn(Optional.empty());
+        when(userRepository.findById(expedId)).thenReturn(Optional.of(exped));
+
+        assertThatThrownBy(() -> colisService.createColisRequest(expedId, distId, List.of(prodId)))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("User not found with id: " + distId);
+
+        verify(userRepository).findById(expedId);
+        verify(userRepository).findById(distId);
+        verify(produitRepository, never()).findById(anyString());
+        verify(colisMapper, never()).toEntity(any());
+        verify(colisRepository, never()).save(any());
+        verify(colisProduitMapper, never()).toEntity(any());
+        verify(colisProduitRepository, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("create colis request with Error Produits")
+    void testCreateColisRequest_WithErrorProd() {
+        String expedId = "exp-1";
+        String distId = "dist-1";
+        String prodId = "prod-1";
+
+        User exped = User.builder().id(expedId).nom("Jean").prenom("Dupont").build();
+        User dist = User.builder().id(distId).nom("Marie").prenom("Durand").build();
+
+        when(userRepository.findById(expedId)).thenReturn(Optional.of(exped));
+        when(userRepository.findById(distId)).thenReturn(Optional.of(dist));
+        when(produitRepository.findById(prodId)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> colisService.createColisRequest(expedId, distId, List.of(prodId)))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("Produit not found with id: " + prodId);
+
+        verify(userRepository).findById(expedId);
+        verify(userRepository).findById(distId);
+        verify(produitRepository).findById(anyString());
+        verify(colisMapper, never()).toEntity(any());
+        verify(colisRepository, never()).save(any());
+        verify(colisProduitMapper, never()).toEntity(any());
+        verify(colisProduitRepository, never()).save(any());
+    }
 }
