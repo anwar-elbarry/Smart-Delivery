@@ -177,6 +177,22 @@ public class ColisServiceTest {
         verify(colisRepository).existsById("colis-uuid-123");
 
     }
+    @Test
+    @DisplayName("test Update colis with Error")
+    void testUpdateColis_WithError(){
+
+        // mock
+        when(colisRepository.existsById("colis-uuid-123")).thenReturn(false);
+
+        assertThatThrownBy(()->  colisService.update("colis-uuid-123",colisDTO))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("Colis not found with id: colis-uuid-123");
+
+
+        verify(colisRepository,never()).save(any(Colis.class));
+        verify(colisMapper,never()).toEntity(any());
+        verify(colisRespMapper,never()).toRespDto(any());
+    }
 
     @Test
     @DisplayName("Find Exist Id With Error")
@@ -295,7 +311,7 @@ public class ColisServiceTest {
 
     @Test
     @DisplayName("calcule coli's poids..etc with Success")
-    void testCalcule(){
+    void testCalcule_WithSuccess(){
         Coliscounter coliscounter = Coliscounter.builder()
                 .count(5L)
                 .poids(BigDecimal.valueOf(32.4))
@@ -312,7 +328,22 @@ public class ColisServiceTest {
 
         verify(livreurRepository).existsById(livreurId);
         verify(colisRepository).aggregateByLivreurId(livreurId);
+    }
 
+    @Test
+    @DisplayName("Calcule with error")
+    void testCalcule_WithError(){
+
+        String livreurId = UUID.randomUUID().toString();
+
+        when(livreurRepository.existsById(livreurId)).thenReturn(false);
+
+        assertThatThrownBy(() ->colisService.calcule(livreurId))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("Livreur not found with id: "+livreurId);
+
+
+        verify(colisRepository,never()).aggregateByLivreurId(anyString());
     }
 
 
