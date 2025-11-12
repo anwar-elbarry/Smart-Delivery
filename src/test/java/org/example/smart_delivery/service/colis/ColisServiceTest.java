@@ -1,4 +1,4 @@
-package org.example.smart_delivery.service;
+package org.example.smart_delivery.service.colis;
 
 import org.example.smart_delivery.dto.request.ColisDTO;
 import org.example.smart_delivery.dto.request.ColisProduitDTO;
@@ -13,9 +13,6 @@ import org.example.smart_delivery.mapper.request.ColisProduitMapper;
 import org.example.smart_delivery.mapper.request.HistoLivrMapper;
 import org.example.smart_delivery.mapper.response.ColisRespMapper;
 import org.example.smart_delivery.repository.*;
-import org.example.smart_delivery.service.colis.ColisServiceImpl;
-import org.example.smart_delivery.service.colis.Coliscounter;
-import org.example.smart_delivery.service.colis.Colisfilter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
