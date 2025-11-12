@@ -1,11 +1,10 @@
 package org.example.smart_delivery.service;
 
 import org.example.smart_delivery.dto.request.ColisDTO;
+import org.example.smart_delivery.dto.request.ColisProduitDTO;
 import org.example.smart_delivery.dto.request.HistoriqueLivraisonDTO;
 import org.example.smart_delivery.dto.response.ColisRespDTO;
-import org.example.smart_delivery.entity.Colis;
-import org.example.smart_delivery.entity.HistoriqueLivraison;
-import org.example.smart_delivery.entity.Livreur;
+import org.example.smart_delivery.entity.*;
 import org.example.smart_delivery.entity.enums.ColisStatus;
 import org.example.smart_delivery.entity.enums.Priority;
 import org.example.smart_delivery.exception.ResourceNotFoundException;
@@ -34,6 +33,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -313,6 +313,61 @@ public class ColisServiceTest {
         verify(livreurRepository).existsById(livreurId);
         verify(colisRepository).aggregateByLivreurId(livreurId);
 
+    }
+
+
+    @Test
+    @DisplayName("create colis request with success")
+    void testCreateColisRequest_Ok(){
+        String expedId = "exp-1";
+        String distId = "dist-1";
+        String prodId = "prod-1";
+
+        User exped = User.builder().id(expedId).nom("Jean").prenom("Dupont").build();
+        User dist = User.builder().id(distId).nom("Marie").prenom("Durand").build();
+        Produit produit = Produit.builder()
+                .id(prodId)
+                .nom("Produit A")
+                .poids(250.0)
+                .prix(BigDecimal.valueOf(99.9))
+                .build();
+
+        Colis mapped = new Colis();
+        when(colisMapper.toEntity(any(ColisDTO.class))).thenReturn(mapped);
+        Colis persisted = new Colis();
+        persisted.setId("colis-1");
+        when(colisRepository.save(mapped)).thenReturn(persisted);
+
+        ColisProduit mappedCp = new ColisProduit();
+        when(colisProduitMapper.toEntity(any(ColisProduitDTO.class))).thenReturn(mappedCp);
+
+        when(userRepository.findById(expedId)).thenReturn(Optional.of(exped));
+        when(userRepository.findById(distId)).thenReturn(Optional.of(dist));
+        when(produitRepository.findById(prodId)).thenReturn(Optional.of(produit));
+
+        colisService.createColisRequest(expedId, distId, List.of(prodId));
+
+        ArgumentCaptor<ColisDTO> colisDtoCaptor = ArgumentCaptor.forClass(ColisDTO.class);
+        verify(colisMapper).toEntity(colisDtoCaptor.capture());
+        ColisDTO dto = colisDtoCaptor.getValue();
+        assertEquals(BigDecimal.valueOf(250.0), dto.getPoids());
+        assertEquals(Priority.MEDIUM, dto.getPriorite());
+        assertEquals(ColisStatus.CREATED, dto.getStatut());
+        assertEquals(expedId, dto.getClientExpediteurId());
+        assertEquals(distId, dto.getDestinataireId());
+        assertTrue(dto.getDescription().contains("Jean Dupont"));
+        assertTrue(dto.getDescription().contains("Marie Durand"));
+
+        ArgumentCaptor<ColisProduitDTO> cpCaptor = ArgumentCaptor.forClass(ColisProduitDTO.class);
+        verify(colisProduitMapper).toEntity(cpCaptor.capture());
+        ColisProduitDTO cpDto = cpCaptor.getValue();
+        assertEquals("colis-1", cpDto.getColisId());
+        assertEquals(prodId, cpDto.getProduitId());
+        assertEquals(1, cpDto.getQuantite());
+        assertEquals(produit.getPrix(), cpDto.getPrix());
+        assertNotNull(cpDto.getDateAjout());
+
+        verify(colisProduitRepository).save(mappedCp);
     }
 
 }
