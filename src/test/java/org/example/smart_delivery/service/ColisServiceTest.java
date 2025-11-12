@@ -293,6 +293,64 @@ public class ColisServiceTest {
     }
 
     @Test
+    @DisplayName("filter colis By Status with success")
+    void testFilterByStatus_WithSuccess(){
+        Colisfilter colisfilter =  Colisfilter.builder()
+                .Status(ColisStatus.COLLECTED)
+                .build();
+
+        Pageable pageable = PageRequest.of(0,4,Sort.by("id").ascending());
+        Page<Colis> colisPage = new PageImpl<>(List.of(savedColis),pageable,1);
+
+
+        when(colisRepository.findColisByStatut(colisfilter.getStatus(),pageable)).thenReturn(colisPage);
+        when(colisRespMapper.toRespDto(savedColis)).thenReturn(expectedResponse);
+
+        Page<ColisRespDTO> result =  colisService.filter(colisfilter,pageable);
+
+        assertThat(result.getContent()).isEqualTo(List.of(expectedResponse));
+        assertThat(colisfilter.getZoneId()).isNull();
+        assertThat(colisfilter.getStatus()).isNotNull();
+        assertThat(colisfilter.getPriority()).isNull();
+
+        verify(colisRepository,never()).findAll();
+        verify(colisRepository,never()).findColisByPriorite(any(),any());
+        verify(colisRepository).findColisByStatut(colisfilter.getStatus(),pageable);
+        verify(colisRepository,never()).findColisByZone(any(),any());
+
+    }    @Test
+    @DisplayName("filter colis By Zone with success")
+    void testFilterByZone_WithSuccess(){
+        Colisfilter colisfilter =  Colisfilter.builder()
+                .zoneId("zone-123")
+                .build();
+        Zone zone = Zone.builder()
+                .id("zone-123")
+                .build();
+
+        Pageable pageable = PageRequest.of(0,4,Sort.by("id").ascending());
+        Page<Colis> colisPage = new PageImpl<>(List.of(savedColis),pageable,1);
+
+
+        when(zoneRepository.findById("zone-123")).thenReturn(Optional.of(zone));
+        when(colisRepository.findColisByZone(zone,pageable)).thenReturn(colisPage);
+        when(colisRespMapper.toRespDto(savedColis)).thenReturn(expectedResponse);
+
+        Page<ColisRespDTO> result =  colisService.filter(colisfilter,pageable);
+
+        assertThat(result.getContent()).isEqualTo(List.of(expectedResponse));
+        assertThat(colisfilter.getZoneId()).isNotNull();
+        assertThat(colisfilter.getStatus()).isNull();
+        assertThat(colisfilter.getPriority()).isNull();
+
+        verify(colisRepository,never()).findAll();
+        verify(colisRepository,never()).findColisByPriorite(any(),any());
+        verify(colisRepository,never()).findColisByStatut(any(),any());
+        verify(colisRepository).findColisByZone(zone,pageable);
+
+    }
+
+    @Test
     @DisplayName("search colis with success")
     void testSearchColis_WithSuccess(){
         Pageable pageable = PageRequest.of(0,4,Sort.by("id").ascending());
