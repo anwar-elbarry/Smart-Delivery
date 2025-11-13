@@ -11,7 +11,7 @@ import org.example.smart_delivery.entity.enums.UserRole;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
-public class User {
+public class User extends AbstractAuditingEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
