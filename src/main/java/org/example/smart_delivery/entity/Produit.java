@@ -25,5 +25,6 @@ public class Produit {
     private BigDecimal prix;
 
     @OneToMany(mappedBy = "produit",orphanRemoval = true , cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+            @Builder.Default
     List<ColisProduit> colisProduitList = new ArrayList<>();
 }
