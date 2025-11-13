@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 13
+      author: dev
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: created_by
+                  type: VARCHAR(20)
+                  defaultValue: "Admin"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_modified_by
+                  type: VARCHAR(20)
+                  defaultValue: "Admin"
+                  constraints:
+                    nullable: false
