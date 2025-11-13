@@ -44,5 +44,6 @@ public class Colis {
     private User destinataire;
 
     @OneToMany(mappedBy = "colis",orphanRemoval = true , cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+            @Builder.Default
     List<ColisProduit> colisProduitList = new ArrayList<>();
 }
