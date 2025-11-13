@@ -21,3 +21,7 @@ databaseChangeLog:
       file: db/changelog/changes/10-alter-colis_prosduit-add-id.yaml
   - include:
       file: db/changelog/changes/11-alter-colis-table.yaml
+  - include:
+      file: db/changelog/changes/12-alter-user-table-add-audit.yaml
+  - include:
+      file: db/changelog/changes/13-alter-users-createdBy-UpdatedBy.yaml
