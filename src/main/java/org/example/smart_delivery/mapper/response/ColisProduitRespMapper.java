@@ -4,8 +4,9 @@ import org.example.smart_delivery.dto.response.ColisProduitRespDTO;
 import org.example.smart_delivery.entity.ColisProduit;
 import org.example.smart_delivery.mapper.RefMapper;
 import org.mapstruct.Mapper;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Mapper(componentModel = "spring", uses = RefMapper.class)
+@Mapper(componentModel = "spring", uses = RefMapper.class,nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface ColisProduitRespMapper {
 
     ColisProduitRespDTO toRespDto(ColisProduit entity);
