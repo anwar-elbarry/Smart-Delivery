@@ -1,8 +1,8 @@
 package org.example.smart_delivery.service.colisproduit;
 
-import org.example.smart_delivery.dto.ColisProduitDTO;
+import org.example.smart_delivery.dto.request.ColisProduitDTO;
 import org.example.smart_delivery.entity.ColisProduit;
-import org.example.smart_delivery.mapper.ColisProduitMapper;
+import org.example.smart_delivery.mapper.request.ColisProduitMapper;
 import org.example.smart_delivery.repository.ColisProduitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
