@@ -1,10 +1,12 @@
 package org.example.smart_delivery.dto.request;
 
 import jakarta.validation.constraints.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.example.smart_delivery.entity.enums.UserRole;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 public class UserDTO {
