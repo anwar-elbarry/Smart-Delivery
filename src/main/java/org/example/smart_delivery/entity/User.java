@@ -3,6 +3,12 @@ package org.example.smart_delivery.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.smart_delivery.entity.enums.UserRole;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -13,7 +19,7 @@ import org.example.smart_delivery.entity.enums.UserRole;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
-public class User extends AbstractAuditingEntity{
+public class User extends AbstractAuditingEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
@@ -25,4 +31,27 @@ public class User extends AbstractAuditingEntity{
     private String adress;
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    private String verificationCode;
+    private LocalDateTime verificationCodeExpired;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public String getPassword() {
+        return "";
+    }
+
+    @Override
+    public String getUsername() {
+        return "";
+    }
+
+    @Override public boolean isAccountNonExpired() { return true; }
+    @Override public boolean isAccountNonLocked() { return true; }
+    @Override public boolean isCredentialsNonExpired() { return true; }
+    @Override public boolean isEnabled() { return true; }
 }
