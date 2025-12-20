@@ -1,9 +1,11 @@
 package org.example.smart_delivery.service.colis;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
+
+@Builder
+@NoArgsConstructor
 @Getter
 @Setter
 public class Coliscounter {

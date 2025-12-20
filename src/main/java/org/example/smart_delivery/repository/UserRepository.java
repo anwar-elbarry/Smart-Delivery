@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface UserRepository extends JpaRepository<User, String> {
     Page<User> findByNomContainingIgnoreCaseOrPrenomContainingIgnoreCaseOrTelephoneContainingOrEmailContainingIgnoreCaseOrAdressContainingIgnoreCase(
             String nom, String prenom, String telephone, String email, String adress, Pageable pageable);
@@ -21,4 +23,14 @@ public interface UserRepository extends JpaRepository<User, String> {
         or lower(u.adress) like lower(concat('%', :q, '%'))
     """)
     Page<User> search(@Param("q") String q, Pageable pageable);
+    
+    Optional<User> findUserByEmail(String email);
+    
+    Optional<User> findUserByVerificationCode(String verificationCode);
+
+    Optional<User> findUserByusername(String username);
+
+    boolean existsByUsername(String username);
+
+    boolean existsByEmail(String email);
 }

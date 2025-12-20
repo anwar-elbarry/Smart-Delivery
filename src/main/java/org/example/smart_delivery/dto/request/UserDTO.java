@@ -1,10 +1,12 @@
 package org.example.smart_delivery.dto.request;
 
 import jakarta.validation.constraints.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.example.smart_delivery.entity.enums.UserRole;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 public class UserDTO {
@@ -13,6 +15,14 @@ public class UserDTO {
     @NotBlank
     @Size(max = 50)
     private String nom;
+
+    @NotBlank
+    @Size(max = 25)
+    private String username;
+
+    @NotBlank
+    @Size(min = 8,message = "at least 8 digits")
+    private String password;
 
     @NotBlank
     @Size(max = 50)

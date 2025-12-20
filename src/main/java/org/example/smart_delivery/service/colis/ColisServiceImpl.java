@@ -1,6 +1,5 @@
 package org.example.smart_delivery.service.colis;
 
-import ch.qos.logback.core.util.COWArrayList;
 import org.example.smart_delivery.dto.request.ColisDTO;
 import org.example.smart_delivery.dto.request.ColisProduitDTO;
 import org.example.smart_delivery.dto.request.HistoriqueLivraisonDTO;
@@ -13,7 +12,6 @@ import org.example.smart_delivery.mapper.request.ColisMapper;
 import org.example.smart_delivery.mapper.request.ColisProduitMapper;
 import org.example.smart_delivery.mapper.request.HistoLivrMapper;
 import org.example.smart_delivery.mapper.response.ColisRespMapper;
-import org.example.smart_delivery.mapper.response.HistoLivrRespMapper;
 import org.example.smart_delivery.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,7 +21,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -60,6 +57,7 @@ public class ColisServiceImpl implements ColisService {
         if (!colisRepository.existsById(id)) {
             throw new ResourceNotFoundException("Colis",id);
         }
+
         Colis entity = colisMapper.toEntity(dto);
         entity.setId(id);
         Colis saved = colisRepository.save(entity);
@@ -68,8 +66,7 @@ public class ColisServiceImpl implements ColisService {
 
     @Override
     public ColisRespDTO getById(String id) {
-        Colis entity = colisRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Colis",id));
+        Colis entity = this.checkIfColisExist(id);
         return colisRespMapper.toRespDto(entity);
     }
 
@@ -81,16 +78,13 @@ public class ColisServiceImpl implements ColisService {
 
     @Override
     public void delete(String id) {
-        if (!colisRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Colis",id);
-        }
+        this.checkIfColisExist(id);
         colisRepository.deleteById(id);
     }
 
     @Override
     public void Assign_col(String colisId,String livreurId) {
-        Colis colis = colisRepository.findById(colisId)
-                .orElseThrow(() -> new ResourceNotFoundException("Colis",colisId));
+        Colis colis = this.checkIfColisExist(colisId);
         Livreur livreur = livreurRepository.findById(livreurId)
                 .orElseThrow(() -> new ResourceNotFoundException("Livreur",livreurId));
         colis.setLivreur(livreur);
@@ -189,6 +183,16 @@ public class ColisServiceImpl implements ColisService {
 
     @Override
     public Coliscounter calcule(String livreurId) {
+        if (!livreurRepository.existsById(livreurId)){
+            throw new ResourceNotFoundException("Livreur", livreurId);
+        }
+
         return colisRepository.aggregateByLivreurId(livreurId);
     }
+
+    public Colis checkIfColisExist(String id) throws ResourceNotFoundException{
+        return colisRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Colis",id));
+    }
+
 }

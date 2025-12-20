@@ -1,6 +1,6 @@
 package org.example.smart_delivery.service.colisproduit;
 
-import org.example.smart_delivery.dto.ColisProduitDTO;
+import org.example.smart_delivery.dto.request.ColisProduitDTO;
 import java.util.List;
 
 public interface ColisProduitService {

@@ -4,13 +4,15 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
-import lombok.Getter;
-import lombok.Setter;
+
+import lombok.*;
 import org.example.smart_delivery.entity.Zone;
 import org.example.smart_delivery.entity.enums.ColisStatus;
 import org.example.smart_delivery.entity.enums.Priority;
 import org.springframework.lang.Nullable;
-
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class ColisDTO {
