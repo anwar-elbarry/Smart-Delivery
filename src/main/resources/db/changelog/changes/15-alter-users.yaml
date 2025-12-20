@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 15
+      author: admin
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: verification_code
+                  type: VARCHAR(64)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: verification_code_expired
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: true
+        - modifyDataType:
+            tableName: users
+            columnName: password
+            newDataType: VARCHAR(255)

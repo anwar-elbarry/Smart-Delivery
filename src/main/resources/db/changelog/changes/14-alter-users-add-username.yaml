@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 12
+      author: admin
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: username
+                  type: VARCHAR(25)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
