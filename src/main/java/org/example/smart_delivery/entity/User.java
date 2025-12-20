@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.example.smart_delivery.entity.enums.UserRole;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
@@ -23,12 +24,14 @@ public class User extends AbstractAuditingEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+    private String username;
     private String nom;
     private String prenom;
     @Column(unique = true)
     private String email;
     private String telephone;
     private String adress;
+    private String password;
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
@@ -37,21 +40,36 @@ public class User extends AbstractAuditingEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return List.of(new SimpleGrantedAuthority(getRole().name()));
     }
 
     @Override
     public String getPassword() {
-        return "";
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return "";
+        return this.username;
     }
 
-    @Override public boolean isAccountNonExpired() { return true; }
-    @Override public boolean isAccountNonLocked() { return true; }
-    @Override public boolean isCredentialsNonExpired() { return true; }
-    @Override public boolean isEnabled() { return true; }
+    @Override 
+    public boolean isAccountNonExpired() { 
+        return true; 
+    }
+    
+    @Override 
+    public boolean isAccountNonLocked() { 
+        return true; 
+    }
+    
+    @Override 
+    public boolean isCredentialsNonExpired() { 
+        return true; 
+    }
+    
+    @Override 
+    public boolean isEnabled() { 
+        return true; 
+    }
 }
