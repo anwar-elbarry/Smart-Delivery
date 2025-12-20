@@ -29,3 +29,7 @@ databaseChangeLog:
       file: db/changelog/changes/14-alter-users-add-username.yaml
   - include:
       file: db/changelog/changes/15-alter-users.yaml
+  - include:
+      file: db/changelog/changes/16-create-permission-table.yaml
+  - include:
+      file: db/changelog/changes/17-create-role-permissions-table.yaml
