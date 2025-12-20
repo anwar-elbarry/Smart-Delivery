@@ -11,10 +11,10 @@ databaseChangeLog:
                   type: VARCHAR(20)
                   defaultValue: "Admin"
                   constraints:
-                    nullable: false
+                    nullable: true
               - column:
                   name: last_modified_by
                   type: VARCHAR(20)
                   defaultValue: "Admin"
                   constraints:
-                    nullable: false
+                    nullable: true
