@@ -17,6 +17,14 @@ public class UserDTO {
     private String nom;
 
     @NotBlank
+    @Size(max = 25)
+    private String username;
+
+    @NotBlank
+    @Size(min = 8,message = "at least 8 digits")
+    private String password;
+
+    @NotBlank
     @Size(max = 50)
     private String prenom;
 
