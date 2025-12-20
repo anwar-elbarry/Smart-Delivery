@@ -25,3 +25,7 @@ databaseChangeLog:
       file: db/changelog/changes/12-alter-user-table-add-audit.yaml
   - include:
       file: db/changelog/changes/13-alter-users-createdBy-UpdatedBy.yaml
+  - include:
+      file: db/changelog/changes/14-alter-users-add-username.yaml
+  - include:
+      file: db/changelog/changes/15-alter-users.yaml
