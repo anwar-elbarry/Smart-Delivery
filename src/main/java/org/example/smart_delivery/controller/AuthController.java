@@ -7,15 +7,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.security.jwt.JwtService;
-import org.example.security.service.TokenService;
 import org.example.smart_delivery.dto.request.AuthRequest;
 import org.example.smart_delivery.dto.request.RegisterRequest;
 import org.example.smart_delivery.dto.response.AuthResponse;
 import org.example.smart_delivery.service.authService.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,12 +40,15 @@ public class AuthController {
         try {
             Map<String, String> tokens = authService.login(request);
             return ResponseEntity.ok(tokens);
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Invalid username or password"));
         } catch (UsernameNotFoundException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("error", "Authentication failed", "message", e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "An error occurred during login"));
+                    .body(Map.of("error", "An error occurred during login"+e.getMessage()));
         }
     }
 
@@ -60,10 +61,10 @@ public class AuthController {
     public ResponseEntity<AuthResponse> register (@Valid @RequestBody RegisterRequest request) throws RuntimeException{
 
         // Générer le token JWT
-        String jwtToken = authService.register(request);
+        Map<String,String> jwtToken = authService.register(request);
 
         // Retourner la réponse avec le token
-        return ResponseEntity.ok(new AuthResponse(jwtToken));
+        return ResponseEntity.ok(new AuthResponse(jwtToken.get("accessToken"),jwtToken.get("refreshToken")));
     }
 
     @Operation(summary = "User logout")
