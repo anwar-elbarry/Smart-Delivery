@@ -46,11 +46,6 @@ public class SecurityConfig {
                                         "/v3/api-docs/**",
                                         "/swagger-ui/**",
                                         "/swagger-ui.html").permitAll()
-//                                .requestMatchers("/gestion/**").hasRole("GESTIONNAIRE")
-//                                .requestMatchers("/livreur/**").hasRole("LIVREUR")
-//                                .requestMatchers("/expediteur/**").hasRole("EXPEDITEUR")
-
-                                // toute autre requête nécessite authentification
                                 .anyRequest().authenticated()
                         )
                 .userDetailsService(userDetailsService)
