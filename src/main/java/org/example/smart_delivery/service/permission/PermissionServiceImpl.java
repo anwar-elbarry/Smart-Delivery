@@ -4,14 +4,18 @@ import lombok.RequiredArgsConstructor;
 import org.example.smart_delivery.dto.request.PermissionReqDTO;
 import org.example.smart_delivery.dto.response.PermissionResDTO;
 import org.example.smart_delivery.entity.Permission;
+import org.example.smart_delivery.entity.Role;
 import org.example.smart_delivery.entity.enums.UserRole;
 import org.example.smart_delivery.exception.ResourceNotFoundException;
 import org.example.smart_delivery.mapper.PermissionMapper;
 import org.example.smart_delivery.repository.PermissionRepository;
+import org.example.smart_delivery.repository.RoleRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +24,7 @@ public class PermissionServiceImpl implements PermissionService {
 
     private final PermissionRepository permissionRepository;
     private final PermissionMapper permissionMapper;
+    private final RoleRepository roleRepository;
 
     @Override
     public PermissionResDTO create(PermissionReqDTO dto) {
@@ -44,20 +49,11 @@ public class PermissionServiceImpl implements PermissionService {
         return permissionMapper.toResp(permission);
     }
 
-    @Override
-    public boolean assign(UserRole role, String permissionId) {
-        Permission permission = permissionRepository.findById(permissionId)
-                .orElseThrow(() -> new ResourceNotFoundException("Permission" , permissionId));
-
-        boolean added = permission.getRoles().add(role);
-        permissionRepository.save(permission);
-        return added;
-    }
 
     @Override
-    public Page<PermissionResDTO> getAll(Pageable pageable) {
-        return permissionRepository.findAll(pageable)
-                .map(permissionMapper::toResp);
+    public List<PermissionResDTO> getAll() {
+        return permissionRepository.findAll().stream()
+                .map(permissionMapper::toResp).toList();
     }
 
     @Override
