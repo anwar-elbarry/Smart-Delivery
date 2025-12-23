@@ -2,7 +2,6 @@ package org.example.smart_delivery.dto.request;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
-import org.example.smart_delivery.entity.enums.UserRole;
 
 @Builder
 @AllArgsConstructor
@@ -42,5 +41,5 @@ public class UserDTO {
     private String adress;
 
     @NotNull
-    private UserRole role;
+    private String roleId;
 }
