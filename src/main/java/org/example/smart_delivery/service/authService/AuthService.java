@@ -6,10 +6,13 @@ import org.example.security.jwt.JwtService;
 import org.example.security.service.TokenService;
 import org.example.smart_delivery.dto.request.AuthRequest;
 import org.example.smart_delivery.dto.request.RegisterRequest;
+import org.example.smart_delivery.entity.Role;
 import org.example.smart_delivery.entity.User;
-import org.example.smart_delivery.entity.enums.UserRole;
+import org.example.smart_delivery.exception.ResourceNotFoundException;
+import org.example.smart_delivery.repository.RoleRepository;
 import org.example.smart_delivery.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,20 +30,23 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
+    private final RoleRepository roleRepository;
 
-    public Map<String, String> login(AuthRequest request) throws UsernameNotFoundException {
+    public Map<String, String> login(AuthRequest request) throws UsernameNotFoundException{
+
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.username(),
+                        request.password()
+                )
+        );
         User user = userRepository.findUserByusername(request.username()).orElseThrow(
                 () -> new UsernameNotFoundException(request.username()));
-        String accessToken = jwtService.generateAccessToken(user);
-        String refreshToken = jwtService.generateRefreshToken(user);
 
-        Map<String, String> tokens = new HashMap<>();
-        tokens.put("accessToken", accessToken);
-        tokens.put("refreshToken", refreshToken);
-        return tokens;
+        return generateTokens(user);
     }
 
-    public String register(RegisterRequest request) throws RuntimeException{
+    public Map<String, String> register(RegisterRequest request) throws RuntimeException{
         // Vérifier si l'utilisateur existe déjà
         if (userRepository.existsByUsername(request.username())) {
             throw new RuntimeException("Username is already taken");
@@ -49,6 +55,10 @@ public class AuthService {
         if (userRepository.existsByEmail(request.email())) {
             throw new RuntimeException("Email is already in use");
         }
+
+        Role role= roleRepository.findById(request.roleId()).orElseThrow(
+                () -> new ResourceNotFoundException("role",request.roleId())
+        );
 
         // Créer un nouvel utilisateur
         User user = User.builder()
@@ -59,13 +69,10 @@ public class AuthService {
                 .prenom(request.prenom())
                 .telephone(request.telephone())
                 .adress(request.adresse())
-                .role(UserRole.valueOf(request.role()))
+                .role(role)
                 .build();
 
-        // Enregistrer l'utilisateur
-        userRepository.save(user);
-
-        return jwtService.generateToken(user);
+        return generateTokens(user);
     }
 
     public Map<String, String> refreshToken(String refreshToken) {
@@ -107,5 +114,15 @@ public class AuthService {
             }
         }
     }
+
+   public Map<String, String> generateTokens(User user){
+       String accessToken = jwtService.generateAccessToken(user);
+       String refreshToken = jwtService.generateRefreshToken(user);
+
+       Map<String, String> tokens = new HashMap<>();
+       tokens.put("accessToken", accessToken);
+       tokens.put("refreshToken", refreshToken);
+       return tokens;
+   }
 
 }
