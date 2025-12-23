@@ -57,7 +57,7 @@ public class JwtService {
 
     private String buildToken(User user, long expiration) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role", user.getRole().name());
+        claims.put("role",user.getRole().getName());
 
         return Jwts.builder()
                 .claims(claims)
@@ -73,19 +73,19 @@ public class JwtService {
         byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
         return new SecretKeySpec(keyBytes, 0, keyBytes.length, "HmacSHA256");    }
 
-    public String generateToken(User user){
-        Map<String,Object> claims = new HashMap<>();
-        claims.put("role",user.getRole());
-
-        return Jwts.builder()
-                .claims(claims)
-                .subject(user.getUsername())
-                .claim("role", user.getRole())
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 86400000)) //24H
-                .signWith(getSigningKey(),SIGNATURE_ALGORITHM)
-                .compact();
-    }
+//    public String generateToken(User user){
+//        Map<String,Object> claims = new HashMap<>();
+//        claims.put("role",user.getRole());
+//
+//        return Jwts.builder()
+//                .claims(claims)
+//                .subject(user.getUsername())
+//                .claim("role","ROLE_"+ user.getRole())
+//                .issuedAt(new Date(System.currentTimeMillis()))
+//                .expiration(new Date(System.currentTimeMillis() + 86400000)) //24H
+//                .signWith(getSigningKey(),SIGNATURE_ALGORITHM)
+//                .compact();
+//    }
 
     public Claims extractAllClaims(String token) throws RuntimeException{
         try {
