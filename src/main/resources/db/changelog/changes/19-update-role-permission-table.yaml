@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: 19
+      author: admin
+      changes:
+        - renameColumn:
+            tableName: role_permissions
+            oldColumnName: role
+            newColumnName: role_id
+            columnDataType: VARCHAR(50)
+
+        - addForeignKeyConstraint:
+            baseTableName: role_permissions
+            baseColumnNames: role_id
+            constraintName: fk_role_permissions_role
+            referencedTableName: role
+            referencedColumnNames: id
