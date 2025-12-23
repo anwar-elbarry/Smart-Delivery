@@ -5,6 +5,7 @@ import org.example.smart_delivery.dto.request.RoleReqDTO;
 import org.example.smart_delivery.dto.response.RoleResDTO;
 import org.example.smart_delivery.entity.Permission;
 import org.example.smart_delivery.entity.Role;
+import org.example.smart_delivery.exception.AlreadyExistsException;
 import org.example.smart_delivery.exception.ResourceNotFoundException;
 import org.example.smart_delivery.mapper.RoleMapper;
 import org.example.smart_delivery.repository.PermissionRepository;
@@ -62,12 +63,16 @@ public class RoleServiceImpl implements RoleService{
     }
 
     @Override
-    public RoleResDTO assign(String roleId, String permissionId) {
+    public RoleResDTO assignPermissions(String roleId, String permissionId){
         Role role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new ResourceNotFoundException("Role", roleId));
 
         Permission permission = permissionRepository.findById(permissionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Permission", permissionId));
+
+            if (role.getPermissions().contains(permission)){
+                throw   new  AlreadyExistsException(permission.getName());
+            }
 
         role.getPermissions().add(permission);
         Role updatedRole = roleRepository.save(role);

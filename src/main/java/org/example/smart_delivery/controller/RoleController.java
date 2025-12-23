@@ -64,9 +64,9 @@ public class RoleController {
     @ApiResponse(responseCode = "200", description = "Permission assigned")
     @ApiResponse(responseCode = "404", description = "Role or Permission not found")
     @PreAuthorize("hasRole('GESTIONNAIRE')")
-    @PostMapping("/{roleId}/permissions/{permissionId}")
+    @PostMapping("assign/{roleId}/permissions/{permissionId}")
     public ResponseEntity<RoleResDTO> assignPermission(@PathVariable String roleId, @PathVariable String permissionId) {
-        return ResponseEntity.ok(roleService.assign(roleId, permissionId));
+        return ResponseEntity.ok(roleService.assignPermissions(roleId, permissionId));
     }
 
     @Operation(summary = "Delete role by id")

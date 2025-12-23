@@ -10,6 +10,6 @@ public interface RoleService {
     RoleResDTO update(String roleId,RoleReqDTO dto);
     RoleResDTO getById(String id);
     List<RoleResDTO> getAll();
-    RoleResDTO assign(String roleId,String permissionId);
+    RoleResDTO assignPermissions(String roleId,String permissionId);
     boolean delete(String id);
 }
