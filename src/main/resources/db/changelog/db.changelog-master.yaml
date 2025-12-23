@@ -33,3 +33,9 @@ databaseChangeLog:
       file: db/changelog/changes/16-create-permission-table.yaml
   - include:
       file: db/changelog/changes/17-create-role-permissions-table.yaml
+  - include:
+      file: db/changelog/changes/18-create-role-table.yaml
+  - include:
+      file: db/changelog/changes/19-update-role-permission-table.yaml
+  - include:
+      file: db/changelog/changes/20-update-users-table.yaml
