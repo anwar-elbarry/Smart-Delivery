@@ -1,5 +1,6 @@
 package org.example.security.jwt;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,6 +19,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Component
@@ -32,23 +36,23 @@ public class JwtAuthFiler extends OncePerRequestFilter {
                                     @NotNull FilterChain filterChain) throws ServletException, IOException {
 
         try {
-        String authHeader = request.getHeader("Authorization");
+            String authHeader = request.getHeader("Authorization");
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                filterChain.doFilter(request, response);
+                return;
+            }
 
-        String jwt = authHeader.substring(7);
+            String jwt = authHeader.substring(7);
 
-        // Check if token is blacklisted
-        if (jwtService.isTokenBlackListed(jwt)) {
-            sendErrorResponse(response, "Token has been invalidated", HttpServletResponse.SC_UNAUTHORIZED);
-            return;
-        }
+            // Check if token is blacklisted
+            if (jwtService.isTokenBlackListed(jwt)) {
+                sendErrorResponse(response, "Token has been invalidated", HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
 
-
-            String username = jwtService.extractAllClaims(jwt).getSubject();
+            Claims claims = jwtService.extractAllClaims(jwt);
+            String username = claims.getSubject();
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -58,9 +62,18 @@ public class JwtAuthFiler extends OncePerRequestFilter {
                     return;
                 }
 
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities()
+                // Extract role from claims and create authorities
+                String role = claims.get("role", String.class);
+                List<SimpleGrantedAuthority> authorities = Collections.singletonList(
+                        new SimpleGrantedAuthority(role.startsWith("ROLE_") ? role : "ROLE_" + role)
                 );
+
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        authorities  // Use the authorities from the token
+                );
+
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
