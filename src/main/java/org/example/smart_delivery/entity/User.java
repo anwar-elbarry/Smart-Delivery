@@ -9,7 +9,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Builder
 @AllArgsConstructor
@@ -41,7 +44,20 @@ public class User extends AbstractAuditingEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(getRole().getName()));
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        if (getRole() != null) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + getRole().getName()));
+
+            if (getRole().getPermissions() != null) {
+                authorities.addAll(
+                        getRole().getPermissions().stream()
+                                .map(permission -> new SimpleGrantedAuthority(permission.getName()))
+                                .collect(Collectors.toSet())
+                );
+            }
+        }
+
+        return authorities;
     }
 
     @Override
