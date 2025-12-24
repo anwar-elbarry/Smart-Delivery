@@ -72,6 +72,8 @@ public class AuthService {
                 .role(role)
                 .build();
 
+        userRepository.save(user);
+
         return generateTokens(user);
     }
 
