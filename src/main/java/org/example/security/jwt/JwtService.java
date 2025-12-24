@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.security.service.TokenService;
 import org.example.smart_delivery.entity.User;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -57,7 +59,11 @@ public class JwtService {
 
     private String buildToken(User user, long expiration) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role",user.getRole().getName());
+        List<String> authorities = user.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
+        claims.put("authorities",authorities);
 
         return Jwts.builder()
                 .claims(claims)
