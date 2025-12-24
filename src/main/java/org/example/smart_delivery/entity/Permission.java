@@ -7,12 +7,13 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "permission")
 public class Permission {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+    @EqualsAndHashCode.Include
     private String name;
 }
