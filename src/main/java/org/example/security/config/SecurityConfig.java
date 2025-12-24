@@ -46,6 +46,8 @@ public class SecurityConfig {
                                         "/v3/api-docs/**",
                                         "/swagger-ui/**",
                                         "/swagger-ui.html").permitAll()
+                                .requestMatchers("/api/permissions/**").hasRole("GESTIONNAIRE")
+                                .requestMatchers("/api/zones/**").hasAuthority("ZONE_CRUD")
                                 .anyRequest().authenticated()
                         )
                 .userDetailsService(userDetailsService)
