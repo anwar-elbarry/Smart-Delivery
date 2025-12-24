@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class ColisController {
             @ApiResponse(responseCode = "201", description = "Coli created"),
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
+    @PreAuthorize("hasAuthority('COLI_CREATE')")
     @PostMapping
     public ResponseEntity<ColisRespDTO> creatColi(@Valid @RequestBody ColisDTO colis){
         ColisRespDTO colisDTO = colisService.create(colis);
@@ -48,6 +50,7 @@ public class ColisController {
             @ApiResponse(responseCode = "202", description = "Coli Updated"),
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
+    @PreAuthorize("hasAuthority('COLI_UPDATE')")
     @PutMapping("{coliId}")
     public ResponseEntity<ColisRespDTO> updateColi(@Valid @RequestBody ColisDTO coli ,@PathVariable String coliId){
         ColisRespDTO updated = colisService.update(coliId,coli);
@@ -59,12 +62,13 @@ public class ColisController {
             @ApiResponse(responseCode = "204", description = "Coli assigned"),
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
+    @PreAuthorize("hasAuthority('COLI_ASSIGN')")
     @PutMapping("/assign")
     public ResponseEntity<Void> assignColi(@RequestParam String colisId ,@RequestParam String livreurId){
         colisService.Assign_col(colisId,livreurId);
         return ResponseEntity.noContent().build();
     }
-
+    @PreAuthorize("hasAuthority('COLI_READ')")
     @GetMapping
     public ResponseEntity<Page<ColisRespDTO>> getAll(
             @RequestParam(defaultValue = "0") int page,
@@ -83,6 +87,7 @@ public class ColisController {
             @ApiResponse(responseCode = "201", description = "Coli requested"),
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
+    @PreAuthorize("hasAuthority('COLI_CREATE')")
     @PutMapping("/colisRequest")
     public ResponseEntity<Void> CreateColisRequest(@RequestParam String expedId ,
                                                    @RequestParam String distenId,
@@ -97,6 +102,7 @@ public class ColisController {
             @ApiResponse(responseCode = "201", description = "Coli filtred"),
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
+    @PreAuthorize("hasAuthority('COLI_READ')")
     @GetMapping("/filter")
     public ResponseEntity <Page<ColisRespDTO>> filter(
             @RequestParam Colisfilter colisfilter,
@@ -108,6 +114,7 @@ public class ColisController {
             @ApiResponse(responseCode = "201", description = "Coli searched"),
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
+    @PreAuthorize("hasAuthority('COLI_READ')")
     @GetMapping("/search")
     public ResponseEntity<Page<ColisRespDTO>> search(@RequestParam String q, @ParameterObject Pageable pageable) {
         return ResponseEntity.ok(colisService.search(q, pageable));
@@ -118,6 +125,7 @@ public class ColisController {
             @ApiResponse(responseCode = "201", description = "calculated"),
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
+    @PreAuthorize("hasAuthority('COLI_CREATE')")
     @GetMapping("/calcule")
     public ResponseEntity<Coliscounter> calcule(
             @RequestParam String livreurId

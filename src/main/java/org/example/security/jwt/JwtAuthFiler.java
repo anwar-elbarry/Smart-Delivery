@@ -1,5 +1,6 @@
 package org.example.security.jwt;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,6 +20,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
@@ -26,29 +33,45 @@ public class JwtAuthFiler extends OncePerRequestFilter {
     private final JwtService jwtService;
 
     private final UserDetailsService userDetailsService;
-
+    // In JwtAuthFiler.java
+    @SuppressWarnings("unchecked")
+    private Collection<? extends GrantedAuthority> extractAuthorities(Claims claims) {
+        try {
+            List<String> authorities = (List<String>) claims.get("authorities");
+            if (authorities == null || authorities.isEmpty()) {
+                return Collections.emptyList();
+            }
+            return authorities.stream()
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            logger.error("Error extracting authorities from token", e);
+            return Collections.emptyList();
+        }
+    }
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response,
                                     @NotNull FilterChain filterChain) throws ServletException, IOException {
 
         try {
-        String authHeader = request.getHeader("Authorization");
+            String authHeader = request.getHeader("Authorization");
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                filterChain.doFilter(request, response);
+                return;
+            }
 
-        String jwt = authHeader.substring(7);
-
-        // Check if token is blacklisted
-        if (jwtService.isTokenBlackListed(jwt)) {
-            sendErrorResponse(response, "Token has been invalidated", HttpServletResponse.SC_UNAUTHORIZED);
-            return;
-        }
+            String jwt = authHeader.substring(7);
 
 
-            String username = jwtService.extractAllClaims(jwt).getSubject();
+            // Check if token is blacklisted
+            if (jwtService.isTokenBlackListed(jwt)) {
+                sendErrorResponse(response, "Token has been invalidated", HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
+
+            Claims claims = jwtService.extractAllClaims(jwt);
+            String username = claims.getSubject();
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -58,9 +81,15 @@ public class JwtAuthFiler extends OncePerRequestFilter {
                     return;
                 }
 
+                // Extract role from claims and create authorities
+                Collection<? extends GrantedAuthority> authorities = extractAuthorities(claims);
+
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities()
+                        userDetails,
+                        null,
+                        authorities  // Use the authorities from the token
                 );
+
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }

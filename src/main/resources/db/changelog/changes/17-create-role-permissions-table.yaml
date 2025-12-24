@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 17
+      author: admin
+      changes:
+        - createTable:
+            tableName: role_permissions
+            columns:
+              - column:
+                  name: permission_id
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_role_permissions_permission
+                    references: permission(id)
+              - column:
+                  name: role
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+

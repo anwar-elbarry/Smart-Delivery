@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20
+      author: admin
+      changes:
+        # First rename the column
+        - renameColumn:
+            tableName: users
+            oldColumnName: role
+            newColumnName: role_id
+            columnDataType: VARCHAR(50)
+
+        # Then add the foreign key constraint
+        - addForeignKeyConstraint:
+            baseTableName: users
+            baseColumnNames: role_id
+            constraintName: fk_users_role
+            referencedTableName: role
+            referencedColumnNames: id

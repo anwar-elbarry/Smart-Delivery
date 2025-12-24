@@ -54,7 +54,7 @@ class UserControllerTest {
                 .email("john@example.com")
                 .telephone("0123456")
                 .adress("123 main")
-                .role(UserRole.LIVREUR)
+                .roleId("role123")
                 .build();
 
         userRespDTO = UserRespDTO.builder()
@@ -64,7 +64,7 @@ class UserControllerTest {
                 .email("john@example.com")
                 .adress("123 main")
                 .telephone("0123456")
-                .role(UserRole.LIVREUR)
+                .roleName("LIVREUR")
                 .build();
     }
 

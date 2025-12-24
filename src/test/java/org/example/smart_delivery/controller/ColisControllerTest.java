@@ -56,7 +56,7 @@ class ColisControllerTest {
                 .prenom("expPre")
                 .adress("marr")
                 .email("exp@example.com")
-                .role(UserRole.EXPEDITEUR)
+                .roleId("role123")
                 .telephone("087658733")
                 .build();
         this.clientDestinataire = UserDTO.builder()
@@ -65,7 +65,7 @@ class ColisControllerTest {
                 .prenom("destPre")
                 .adress("marr")
                 .email("dest@example.com")
-                .role(UserRole.DESTINATAIRE)
+                .roleId("role123")
                 .telephone("087658733")
                 .build();
         this.zoneDTO = new ZoneDTO();
