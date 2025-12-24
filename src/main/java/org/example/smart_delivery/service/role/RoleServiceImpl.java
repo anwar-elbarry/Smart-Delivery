@@ -63,19 +63,38 @@ public class RoleServiceImpl implements RoleService{
     }
 
     @Override
-    public RoleResDTO assignPermissions(String roleId, String permissionId){
+    public RoleResDTO assignPermissions(String roleId, List<String> permissionIds) {
         Role role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new ResourceNotFoundException("Role", roleId));
 
-        Permission permission = permissionRepository.findById(permissionId)
-                .orElseThrow(() -> new ResourceNotFoundException("Permission", permissionId));
+        permissionIds.forEach(permissionId -> {
+            Permission permission = permissionRepository.findById(permissionId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Permission", permissionId));
 
-            if (role.getPermissions().contains(permission)){
-                throw   new  AlreadyExistsException(permission.getName());
+            if (role.getPermissions().stream()
+                    .anyMatch(p -> p.getId().equals(permissionId))) {
+                throw new AlreadyExistsException(permission.getName());
             }
 
-        role.getPermissions().add(permission);
+            role.getPermissions().add(permission);
+        });
+
         Role updatedRole = roleRepository.save(role);
         return roleMapper.toResDTO(updatedRole);
+    }
+
+    @Override
+    public RoleResDTO takePermission(String roleId, List<String> permissionIds) {
+        Role role = roleRepository.findById(roleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Role", roleId));
+
+        permissionIds.forEach(permissionId -> {
+            Permission permission = permissionRepository.findById(permissionId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Permission", permissionId));
+
+            role.getPermissions().remove(permission);
+        });
+        Role saved = roleRepository.save(role);
+       return roleMapper.toResDTO(saved);
     }
 }
