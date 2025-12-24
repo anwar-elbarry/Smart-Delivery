@@ -10,7 +10,6 @@ import org.example.smart_delivery.dto.response.PermissionResDTO;
 import org.example.smart_delivery.service.permission.PermissionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,7 +25,6 @@ public class PermissionController {
     @Operation(summary = "Create a new Permission")
     @ApiResponse(responseCode = "201", description = "Permission created")
     @ApiResponse(responseCode = "400", description = "Validation error")
-    @PreAuthorize("hasRole('GESTIONNAIRE')")
     @PostMapping
     public ResponseEntity<PermissionResDTO> create(@Valid @RequestBody PermissionReqDTO dto) {
         PermissionResDTO created = permissionService.create(dto);
@@ -36,7 +34,6 @@ public class PermissionController {
     @Operation(summary = "Update an existing permission by id")
     @ApiResponse(responseCode = "200", description = "Permission updated")
     @ApiResponse(responseCode = "404", description = "Permission not found")
-    @PreAuthorize("hasRole('GESTIONNAIRE')")
     @PutMapping("/{id}")
     public ResponseEntity<PermissionResDTO> update(@PathVariable String id, @Valid @RequestBody PermissionReqDTO dto) {
         PermissionResDTO updated = permissionService.take(id, dto);
@@ -46,7 +43,6 @@ public class PermissionController {
     @Operation(summary = "Get permission by id")
     @ApiResponse(responseCode = "200", description = "Permission found")
     @ApiResponse(responseCode = "404", description = "Permission not found")
-    @PreAuthorize("hasRole('GESTIONNAIRE')")
     @GetMapping("/{id}")
     public ResponseEntity<PermissionResDTO> getById(@PathVariable String id) {
         return ResponseEntity.ok(permissionService.getById(id));
@@ -54,7 +50,6 @@ public class PermissionController {
 
     @Operation(summary = "Get all permissions")
     @ApiResponse(responseCode = "200", description = "List of permissions")
-    @PreAuthorize("hasRole('GESTIONNAIRE')")
     @GetMapping
     public ResponseEntity<List<PermissionResDTO>> getAll() {
         return ResponseEntity.ok(permissionService.getAll());
@@ -63,7 +58,6 @@ public class PermissionController {
     @Operation(summary = "Delete permission by id")
     @ApiResponse(responseCode = "204", description = "Permission deleted")
     @ApiResponse(responseCode = "404", description = "Permission not found")
-    @PreAuthorize("hasRole('GESTIONNAIRE')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         permissionService.delete(id);

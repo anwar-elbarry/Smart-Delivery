@@ -64,9 +64,9 @@ public class RoleController {
     @ApiResponse(responseCode = "200", description = "Permission assigned")
     @ApiResponse(responseCode = "404", description = "Role or Permission not found")
     @PreAuthorize("hasRole('GESTIONNAIRE')")
-    @PostMapping("assign/{roleId}/permissions/{permissionId}")
-    public ResponseEntity<RoleResDTO> assignPermission(@PathVariable String roleId, @PathVariable String permissionId) {
-        return ResponseEntity.ok(roleService.assignPermissions(roleId, permissionId));
+    @PostMapping("assign/{roleId}/permissions")
+    public ResponseEntity<RoleResDTO> assignPermission(@PathVariable String roleId, @RequestBody List<String> permissionIds) {
+        return ResponseEntity.ok(roleService.assignPermissions(roleId, permissionIds));
     }
 
     @Operation(summary = "Delete role by id")
@@ -77,5 +77,14 @@ public class RoleController {
     public ResponseEntity<Void> delete(@PathVariable String id) {
         roleService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "take permission from role")
+    @ApiResponse(responseCode = "204", description = "permission taked")
+    @ApiResponse(responseCode = "404", description = "resourse not found")
+    @PreAuthorize("hasRole('GESTIONNAIRE')")
+    @PostMapping("/take/{id}")
+    public ResponseEntity<RoleResDTO> takePermission(@PathVariable String id,@RequestBody List<String> permissionIds) {
+        return ResponseEntity.ok(roleService.takePermission(id,permissionIds));
     }
 }
