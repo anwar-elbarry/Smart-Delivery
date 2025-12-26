@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 21
+      author: admin
+      changes:
+        - sql:
+            sql: ALTER TABLE users ALTER COLUMN role_id TYPE VARCHAR(36);
+            comment: Update role_id column to support UUID (36 characters)
