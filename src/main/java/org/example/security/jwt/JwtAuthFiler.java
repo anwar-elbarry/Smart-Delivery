@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.example.security.service.TokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,6 +32,7 @@ public class JwtAuthFiler extends OncePerRequestFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthFiler.class);
     private final JwtService jwtService;
+    private final TokenService tokenService;
 
     private final UserDetailsService userDetailsService;
     // In JwtAuthFiler.java
@@ -65,7 +67,8 @@ public class JwtAuthFiler extends OncePerRequestFilter {
 
 
             // Check if token is blacklisted
-            if (jwtService.isTokenBlackListed(jwt)) {
+            if (tokenService.isTokenBlacklisted(jwt)) {
+                logger.warn("Attempted to use blacklisted token");
                 sendErrorResponse(response, "Token has been invalidated", HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
