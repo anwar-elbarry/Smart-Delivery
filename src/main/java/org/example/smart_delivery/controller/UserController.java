@@ -67,7 +67,7 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Users returned")
     })
-//    @PreAuthorize("hasRole('GESTIONNAIRE')")
+@PreAuthorize("hasRole('GESTIONNAIRE')")
     @GetMapping
     public ResponseEntity<List<UserRespDTO>> getAll() {
         return ResponseEntity.ok(userService.getAll());

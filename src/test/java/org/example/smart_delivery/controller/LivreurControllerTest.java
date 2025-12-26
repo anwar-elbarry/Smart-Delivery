@@ -62,7 +62,7 @@ class LivreurControllerTest {
                 .prenom("expPre")
                 .adress("marr")
                 .email("exp@example.com")
-                .role(UserRole.LIVREUR)
+                .roleId("role123")
                 .telephone("087658733")
                 .build();
 

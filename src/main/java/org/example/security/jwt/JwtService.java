@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.security.service.TokenService;
 import org.example.smart_delivery.entity.User;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -57,7 +59,11 @@ public class JwtService {
 
     private String buildToken(User user, long expiration) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role", user.getRole().name());
+        List<String> authorities = user.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
+        claims.put("authorities",authorities);
 
         return Jwts.builder()
                 .claims(claims)
@@ -73,19 +79,19 @@ public class JwtService {
         byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
         return new SecretKeySpec(keyBytes, 0, keyBytes.length, "HmacSHA256");    }
 
-    public String generateToken(User user){
-        Map<String,Object> claims = new HashMap<>();
-        claims.put("role",user.getRole());
-
-        return Jwts.builder()
-                .claims(claims)
-                .subject(user.getUsername())
-                .claim("role", user.getRole())
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 86400000)) //24H
-                .signWith(getSigningKey(),SIGNATURE_ALGORITHM)
-                .compact();
-    }
+//    public String generateToken(User user){
+//        Map<String,Object> claims = new HashMap<>();
+//        claims.put("role",user.getRole());
+//
+//        return Jwts.builder()
+//                .claims(claims)
+//                .subject(user.getUsername())
+//                .claim("role","ROLE_"+ user.getRole())
+//                .issuedAt(new Date(System.currentTimeMillis()))
+//                .expiration(new Date(System.currentTimeMillis() + 86400000)) //24H
+//                .signWith(getSigningKey(),SIGNATURE_ALGORITHM)
+//                .compact();
+//    }
 
     public Claims extractAllClaims(String token) throws RuntimeException{
         try {

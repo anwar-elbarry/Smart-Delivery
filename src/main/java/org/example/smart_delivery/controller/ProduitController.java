@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +29,7 @@ public class ProduitController {
             @ApiResponse(responseCode = "201", description = "produit created"),
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
+    @PreAuthorize("hasAuthority('PRODUCT_CREATE')")
     @PostMapping
     public ResponseEntity<ProduitRespDTO> create(@Validated @RequestBody ProduitDTO produitDTO){
         ProduitRespDTO created =  produitService.create(produitDTO);
@@ -39,6 +41,7 @@ public class ProduitController {
             @ApiResponse(responseCode = "201", description = "produits getted"),
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
+    @PreAuthorize("hasAuthority('PRODUCT_READ')")
     @GetMapping
     public ResponseEntity<Page<ProduitRespDTO>> getAll(@ParameterObject Pageable pageable){
 
@@ -51,6 +54,7 @@ public class ProduitController {
             @ApiResponse(responseCode = "201", description = "produit updated"),
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
+    @PreAuthorize("hasAuthority('PRODUCT_UPDATE')")
     @PutMapping({"{produitId}"})
     public ResponseEntity<ProduitRespDTO> update(@Validated @PathVariable String produitId , @RequestBody ProduitDTO produitDTO){
         ProduitRespDTO updated =  produitService.update(produitId,produitDTO);
@@ -62,6 +66,7 @@ public class ProduitController {
             @ApiResponse(responseCode = "202", description = "produit getted"),
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
+    @PreAuthorize("hasAuthority('PRODUCT_READ')")
     @GetMapping("{produitId}")
     public ResponseEntity<ProduitRespDTO> getProduit(@PathVariable String produitId){
         ProduitRespDTO produitDTO = produitService.getById(produitId);
@@ -73,6 +78,7 @@ public class ProduitController {
             @ApiResponse(responseCode = "201", description = "produit deleted"),
             @ApiResponse(responseCode = "400", description = "Validation error")
     })
+    @PreAuthorize("hasAuthority('PRODUCT_DELETE')")
     @DeleteMapping("{produitId}")
     public ResponseEntity<ProduitRespDTO> delete(@PathVariable String produitId){
         produitService.delete(produitId);

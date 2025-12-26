@@ -9,7 +9,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Builder
 @AllArgsConstructor
@@ -32,15 +35,29 @@ public class User extends AbstractAuditingEntity implements UserDetails {
     private String telephone;
     private String adress;
     private String password;
-    @Enumerated(EnumType.STRING)
-    private UserRole role;
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     private String verificationCode;
     private LocalDateTime verificationCodeExpired;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(getRole().name()));
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        if (getRole() != null) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + getRole().getName()));
+
+            if (getRole().getPermissions() != null) {
+                authorities.addAll(
+                        getRole().getPermissions().stream()
+                                .map(permission -> new SimpleGrantedAuthority(permission.getName()))
+                                .collect(Collectors.toSet())
+                );
+            }
+        }
+
+        return authorities;
     }
 
     @Override
