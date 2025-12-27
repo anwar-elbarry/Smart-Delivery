@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: 22
+      author: admin
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: provider
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: provider_id
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: enable
+                  type: BOOLEAN
+                  defaultValue: true
+                  constraints:
+                    nullable: false
