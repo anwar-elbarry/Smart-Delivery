@@ -6,9 +6,9 @@ services:
     container_name: db_delivery
     restart: always
     environment:
-      POSTGRES_DB: smart_delivery
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: Jppp5734
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "5433:5432"
     volumes:
@@ -30,9 +30,9 @@ services:
       - postgres-db
       - redis
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/smart_delivery
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=Jppp5734
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/${DB_NAME}
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
       - SPRING_JPA_HIBERNATE_DDL_AUTO=none
       - SPRING_DATA_REDIS_HOST=redis
       - SPRING_DATA_REDIS_PORT=6379
