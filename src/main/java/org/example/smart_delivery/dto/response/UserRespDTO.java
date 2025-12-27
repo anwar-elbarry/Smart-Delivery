@@ -2,6 +2,7 @@ package org.example.smart_delivery.dto.response;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.example.smart_delivery.entity.enums.Provider;
 import org.example.smart_delivery.entity.enums.UserRole;
 @Builder
 @NoArgsConstructor
@@ -24,4 +25,7 @@ public class UserRespDTO {
     private String adress;
 
     private String roleName;
+    private Provider provider;
+    private String providerId;
+    private Boolean enable;
 }
