@@ -2,6 +2,7 @@ package org.example.security.config;
 
 import lombok.RequiredArgsConstructor;
 import org.example.security.jwt.JwtAuthFiler;
+import org.example.security.oauth2.MultiProviderSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,6 +31,7 @@ public class SecurityConfig {
 
     private final JwtAuthFiler jwtAuthFiler;
     private final UserDetailsService userDetailsService;
+    private final MultiProviderSuccessHandler multiProviderSuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
@@ -43,6 +45,8 @@ public class SecurityConfig {
                                 // règles métier
                                 .requestMatchers(
                                         "/api/auth/**",
+                                        "/login/**",
+                                        "/oauth2/**",
                                         "/v3/api-docs/**",
                                         "/swagger-ui/**",
                                         "/swagger-ui.html").permitAll()
@@ -50,6 +54,8 @@ public class SecurityConfig {
                                 .requestMatchers("/api/zones/**").hasAuthority("ZONE_CRUD")
                                 .anyRequest().authenticated()
                         )
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(multiProviderSuccessHandler))
                 .userDetailsService(userDetailsService)
                 .addFilterBefore(jwtAuthFiler , UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
