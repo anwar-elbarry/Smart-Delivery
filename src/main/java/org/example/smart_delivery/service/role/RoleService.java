@@ -9,6 +9,7 @@ public interface RoleService {
     RoleResDTO create(RoleReqDTO dto);
     RoleResDTO update(String roleId,RoleReqDTO dto);
     RoleResDTO getById(String id);
+    RoleResDTO getByName(String name);
     List<RoleResDTO> getAll();
     RoleResDTO assignPermissions(String roleId,List<String> permissionId);
     RoleResDTO takePermission(String roleId,List<String> permissionId);

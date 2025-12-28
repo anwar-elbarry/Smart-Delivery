@@ -47,6 +47,13 @@ public class RoleServiceImpl implements RoleService{
     }
 
     @Override
+    public RoleResDTO getByName(String name) {
+        Role role = roleRepository.findRoleByName(name)
+                .orElseThrow(() -> new RuntimeException("Role not found with name :"+name));
+        return roleMapper.toResDTO(role);
+    }
+
+    @Override
     public List<RoleResDTO> getAll() {
         return roleRepository.findAll().stream()
                 .map(roleMapper::toResDTO)
