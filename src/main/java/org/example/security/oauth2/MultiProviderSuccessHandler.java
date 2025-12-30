@@ -59,6 +59,9 @@ public class MultiProviderSuccessHandler extends SimpleUrlAuthenticationSuccessH
                 // Create new user
                 UserDTO newUser = UserDTO.builder()
                         .email(user.getEmail())
+                        .username(user.getUsername())
+                        .nom(user.getNom())
+                        .prenom(user.getPrenom())
                         .roleId(clientRole.getId())
                         .provider(Provider.valueOf(oAuth2Strategy.getProviderName()))
                         .providerId(user.getProviderId())
