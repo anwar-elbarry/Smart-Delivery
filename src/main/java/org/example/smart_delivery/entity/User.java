@@ -2,6 +2,7 @@ package org.example.smart_delivery.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.smart_delivery.entity.enums.Provider;
 import org.example.smart_delivery.entity.enums.UserRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -35,6 +36,9 @@ public class User extends AbstractAuditingEntity implements UserDetails {
     private String telephone;
     private String adress;
     private String password;
+    private Provider provider;
+    private String providerId;
+    private Boolean enable;
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;

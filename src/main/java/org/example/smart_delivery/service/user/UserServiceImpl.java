@@ -11,10 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -39,6 +39,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserRespDTO getById(String id) {
         User entity = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found: ", id));
@@ -46,11 +47,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public UserRespDTO getByEmail(String email) {
+        User entity = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email:"+email));
+        return userRespMapper.toRespDto(entity);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<UserRespDTO> getAll() {
         return userRepository.findAll()
                 .stream()
                 .map(userRespMapper::toRespDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -62,6 +72,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<UserRespDTO> search(String q, Pageable pageable) {
         return userRepository.search(q, pageable).map(userRespMapper::toRespDto);
     }

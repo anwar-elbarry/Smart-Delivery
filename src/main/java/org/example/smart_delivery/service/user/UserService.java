@@ -11,6 +11,7 @@ public interface UserService {
     UserRespDTO create(UserDTO dto);
     UserRespDTO update(String id, UserDTO dto);
     UserRespDTO getById(String id);
+    UserRespDTO getByEmail(String email);
     List<UserRespDTO> getAll();
     void delete(String id);
     Page<UserRespDTO> search(String q, Pageable pageable);

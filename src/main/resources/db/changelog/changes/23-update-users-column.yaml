@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: 23
+      author: admin
+      changes:
+        - dropNotNullConstraint:
+            tableName: users
+            columnName: nom
+            columnDataType: VARCHAR(50)
+        - dropNotNullConstraint:
+            tableName: users
+            columnName: prenom
+            columnDataType: VARCHAR(50)
+        - dropNotNullConstraint:
+            tableName: users
+            columnName: telephone
+            columnDataType: VARCHAR(25)
+        - dropNotNullConstraint:
+            tableName: users
+            columnName: adress
+            columnDataType: VARCHAR(50)
+        - dropNotNullConstraint:
+            tableName: users
+            columnName: password
+            columnDataType: VARCHAR(255)
