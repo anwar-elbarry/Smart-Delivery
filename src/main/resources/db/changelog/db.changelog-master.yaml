@@ -43,3 +43,5 @@ databaseChangeLog:
       file: db/changelog/changes/21-alter-column-role_id.yaml
   - include:
       file: db/changelog/changes/22-update-users-table.yaml
+  - include:
+      file: db/changelog/changes/23-update-users-column.yaml
