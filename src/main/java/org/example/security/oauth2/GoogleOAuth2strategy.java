@@ -15,6 +15,7 @@ public class GoogleOAuth2strategy implements OAuth2Strategy {
         user.setEmail((String) attributes.get("email"));
         user.setNom((String) attributes.get("given_name"));
         user.setPrenom((String) attributes.get("family_name"));
+        user.setUsername((String) attributes.get("given_name"));
         user.setProviderId((String) attributes.get("sub"));
         return user;
     }
