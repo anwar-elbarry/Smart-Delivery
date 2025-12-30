@@ -17,7 +17,7 @@ public class Role {
     private String id;
     private String name;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
             @JoinTable(
                     name = "role_permissions",
                     joinColumns = @JoinColumn(name = "role_id"),
