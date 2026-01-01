@@ -3,6 +3,7 @@ package org.example.smart_delivery.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.smart_delivery.dto.request.UserDTO;
 import org.example.smart_delivery.dto.response.UserRespDTO;
+import org.example.smart_delivery.entity.enums.Provider;
 import org.example.smart_delivery.entity.enums.UserRole;
 import org.example.smart_delivery.service.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +16,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientWebSecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.servlet.OAuth2ResourceServerAutoConfiguration;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.example.security.jwt.JwtService;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.example.security.service.TokenService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +41,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(UserController.class)
+@WithMockUser
+@WebMvcTest(controllers = UserController.class,
+        excludeAutoConfiguration = {
+                SecurityAutoConfiguration.class,
+                UserDetailsServiceAutoConfiguration.class,
+                SecurityFilterAutoConfiguration.class,
+                OAuth2ClientAutoConfiguration.class,
+                OAuth2ResourceServerAutoConfiguration.class,
+                OAuth2ClientWebSecurityAutoConfiguration.class
+        })
 class UserControllerTest {
 
     @Autowired
@@ -41,6 +61,15 @@ class UserControllerTest {
 
     @MockitoBean
     private UserService userService;
+
+    @MockitoBean
+    private JwtService jwtService;
+
+    @MockitoBean
+    private UserDetailsService userDetailsService;
+
+    @MockitoBean
+    private TokenService tokenService;
 
     private UserDTO userDTO;
     private UserRespDTO userRespDTO;
@@ -55,6 +84,10 @@ class UserControllerTest {
                 .telephone("0123456")
                 .adress("123 main")
                 .roleId("role123")
+                .provider(Provider.LOCAL)
+                .providerId("123")
+                .enable(true)
+                .password("password123")
                 .build();
 
         userRespDTO = UserRespDTO.builder()

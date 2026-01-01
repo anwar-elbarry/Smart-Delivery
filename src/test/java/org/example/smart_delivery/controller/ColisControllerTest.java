@@ -30,7 +30,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ColisController.class)
+@WebMvcTest(controllers = ColisController.class,
+        excludeAutoConfiguration = {
+                org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class,
+                org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration.class,
+                org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration.class,
+                org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientAutoConfiguration.class,
+                org.springframework.boot.autoconfigure.security.oauth2.resource.servlet.OAuth2ResourceServerAutoConfiguration.class,
+                org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientWebSecurityAutoConfiguration.class
+        })
 class ColisControllerTest {
 
     @Autowired
@@ -41,6 +49,15 @@ class ColisControllerTest {
 
     @MockitoBean
     private ColisService colisService;
+
+    @MockitoBean
+    private org.example.security.jwt.JwtService jwtService;
+
+    @MockitoBean
+    private org.springframework.security.core.userdetails.UserDetailsService userDetailsService;
+
+    @MockitoBean
+    private org.example.security.service.TokenService tokenService;
 
     private UserDTO clientExpedeteur;
     private UserDTO clientDestinataire;

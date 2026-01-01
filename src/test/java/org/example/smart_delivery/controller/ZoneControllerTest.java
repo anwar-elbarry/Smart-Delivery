@@ -11,6 +11,16 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientWebSecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.servlet.OAuth2ResourceServerAutoConfiguration;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.example.security.jwt.JwtService;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.example.security.service.TokenService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +36,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ZoneController.class)
+@WithMockUser
+@WebMvcTest(controllers = ZoneController.class,
+        excludeAutoConfiguration = {
+                SecurityAutoConfiguration.class,
+                UserDetailsServiceAutoConfiguration.class,
+                SecurityFilterAutoConfiguration.class,
+                OAuth2ClientAutoConfiguration.class,
+                OAuth2ResourceServerAutoConfiguration.class,
+                OAuth2ClientWebSecurityAutoConfiguration.class
+        })
 class ZoneControllerTest {
 
     @Autowired
@@ -37,6 +56,15 @@ class ZoneControllerTest {
 
     @MockitoBean
     private ZoneService zoneService;
+
+    @MockitoBean
+    private JwtService jwtService;
+
+    @MockitoBean
+    private UserDetailsService userDetailsService;
+
+    @MockitoBean
+    private TokenService tokenService;
 
     private ZoneDTO zoneDTO;
     private ZoneRespDTO zoneRespDTO;

@@ -1,11 +1,19 @@
 package org.example.smart_delivery.controller;
 
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientWebSecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.servlet.OAuth2ResourceServerAutoConfiguration;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.test.context.support.WithMockUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.security.jwt.JwtService;
 import org.example.smart_delivery.dto.request.LivreurDTO;
 import org.example.smart_delivery.dto.request.UserDTO;
 import org.example.smart_delivery.dto.request.ZoneDTO;
 import org.example.smart_delivery.dto.response.LivreurRespDTO;
-import org.example.smart_delivery.entity.enums.UserRole;
 import org.example.smart_delivery.service.livreur.LivreurService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,10 +21,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.example.security.service.TokenService;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,7 +40,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(LivreurController.class)
+@WithMockUser
+@WebMvcTest(    controllers = LivreurController.class,
+        excludeAutoConfiguration = {
+                SecurityAutoConfiguration.class,
+                UserDetailsServiceAutoConfiguration.class,
+                SecurityFilterAutoConfiguration.class,
+                OAuth2ClientAutoConfiguration.class,
+                OAuth2ResourceServerAutoConfiguration.class,
+                OAuth2ClientWebSecurityAutoConfiguration.class
+        })
 class LivreurControllerTest {
 
     @Autowired
@@ -43,6 +60,15 @@ class LivreurControllerTest {
 
     @MockitoBean
     private LivreurService livreurService;
+
+    @MockitoBean
+    private JwtService jwtService;
+
+    @MockitoBean
+    private UserDetailsService userDetailsService;
+
+    @MockitoBean
+    private TokenService tokenService;
 
 
     private LivreurRespDTO livreurRespDTO;
@@ -82,7 +108,6 @@ class LivreurControllerTest {
         livreurRespDTO.setUser(user);
         livreurRespDTO.setZoneAssignee(zoneDTO);
     }
-
     @Test
     @DisplayName("should create Livreur with success")
     void shouldCreateLivreurWithSuccess() throws Exception{
@@ -124,20 +149,20 @@ class LivreurControllerTest {
     @DisplayName("should get Livreur by id")
     void shouldGetLivreurById() throws Exception {
         String id = livreurId;
-        when(livreurService.getById(eq(id))).thenReturn(livreurRespDTO);
+        when(livreurService.getById(id)).thenReturn(livreurRespDTO);
 
         mockMvc.perform(get("/api/Livreurs/{id}", id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.vehicule").value("Dacia"));
 
-        verify(livreurService).getById(eq(id));
+        verify(livreurService).getById(id);
     }
 
     @Test
     @DisplayName("should list all Livreurs")
     void shouldListLivreurs() throws Exception {
-        List<LivreurRespDTO> list = Arrays.asList(livreurRespDTO);
+        List<LivreurRespDTO> list = List.of(livreurRespDTO);
         when(livreurService.getAll()).thenReturn(list);
 
         mockMvc.perform(get("/api/Livreurs"))
@@ -151,12 +176,12 @@ class LivreurControllerTest {
     @DisplayName("should delete Livreur")
     void shouldDeleteLivreur() throws Exception {
         String id = livreurId;
-        doNothing().when(livreurService).delete(eq(id));
+        doNothing().when(livreurService).delete(id);
 
         mockMvc.perform(delete("/api/Livreurs/{id}", id))
                 .andExpect(status().isNoContent());
 
-        verify(livreurService).delete(eq(id));
+        verify(livreurService).delete(id);
     }
 
 }

@@ -14,6 +14,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientWebSecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.servlet.OAuth2ResourceServerAutoConfiguration;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.example.security.jwt.JwtService;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.example.security.service.TokenService;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -31,7 +41,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ProduitController.class)
+@WithMockUser
+@WebMvcTest(controllers = ProduitController.class,
+        excludeAutoConfiguration = {
+                SecurityAutoConfiguration.class,
+                UserDetailsServiceAutoConfiguration.class,
+                SecurityFilterAutoConfiguration.class,
+                OAuth2ClientAutoConfiguration.class,
+                OAuth2ResourceServerAutoConfiguration.class,
+                OAuth2ClientWebSecurityAutoConfiguration.class
+        })
 class ProduitControllerTest {
 
     @Autowired
@@ -42,6 +61,15 @@ class ProduitControllerTest {
 
     @MockitoBean
     private ProduitService produitService;
+
+    @MockitoBean
+    private JwtService jwtService;
+
+    @MockitoBean
+    private UserDetailsService userDetailsService;
+
+    @MockitoBean
+    private TokenService tokenService;
 
     private ProduitDTO produitDTO;
     private ProduitRespDTO produitRespDTO;
