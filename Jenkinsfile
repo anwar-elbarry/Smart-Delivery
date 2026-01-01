@@ -1,43 +1,41 @@
 pipeline{
 	agent any
-	}
 	tools{
 		maven "M3"
 		jdk "JDK-21"
 	}
-
 	stages{
 		stage('checkout'){
 			steps{
 				checkout scm
 			}
 		}
-		stage ('build') {
+		stage('build') {
 			steps{
 				sh 'mvn clean compile'
 			}
-        stage ('test') {
-			steps {
+
+		}
+        stage('test') {
+			steps{
 				sh 'mvn test'
 			}
-			post {
-				always {
+			post{
+				always{
 					junit '**/target/surefire-reports/*.xml'
 				}
 			}
 		}
-		stage ('package') {
-			steps {
+		stage('package') {
+			steps{
 				sh 'mvn clean package -DskipTests'
 			}
-			post {
-				success {
+			post{
+				success{
 					archiveArtifacts 'target/*.jar, dist/**'  // Archives build outputs
 				}
 			}
 		}
 
 	}
-
-
 }
