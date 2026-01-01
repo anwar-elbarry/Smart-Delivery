@@ -12,13 +12,13 @@ pipeline{
 		}
 		stage('build') {
 			steps{
-				sh 'mvn clean compile'
+				bat 'mvn clean compile'
 			}
 
 		}
         stage('test') {
 			steps{
-				sh 'mvn test'
+				bat 'mvn test'
 			}
 			post{
 				always{
@@ -28,7 +28,7 @@ pipeline{
 		}
 		stage('package') {
 			steps{
-				sh 'mvn clean package -DskipTests'
+				bat 'mvn clean package -DskipTests'
 			}
 			post{
 				success{
