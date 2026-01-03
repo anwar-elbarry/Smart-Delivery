@@ -16,16 +16,6 @@ pipeline{
 			}
 
 		}
-        stage('test') {
-			steps{
-				bat 'mvn test'
-			}
-			post{
-				always{
-					junit '**/target/surefire-reports/*.xml'
-				}
-			}
-		}
 
 		stage('SonarQube Analysis') {
 			steps{
@@ -41,6 +31,17 @@ pipeline{
 				}
 			}
 		}
+        stage('test') {
+			steps{
+				bat 'mvn test'
+			}
+			post{
+				always{
+					junit '**/target/surefire-reports/*.xml'
+				}
+			}
+		}
+
 		stage('package') {
 			steps{
 				bat 'mvn clean package -DskipTests'
