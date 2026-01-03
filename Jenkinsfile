@@ -2,7 +2,7 @@ pipeline{
 	agent any
 
 	environment{
-		IMAGE_NAME = "anouarbarry/SmartDelivery"
+		IMAGE_NAME = "anouarbarry/smartdelivery"
 		IMAGE_TAG = "latest"
 		DOCKER_CRED_ID = "docker-hub-credentials"
 	}
