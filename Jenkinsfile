@@ -54,7 +54,7 @@ pipeline{
 			}
 			post{
 				success{
-					archiveArtifacts 'target/*.jar, dist/**'  // Archives build outputs
+					archiveArtifacts 'target/*.jar, dist/**'
 				}
 			}
 		}
@@ -63,25 +63,9 @@ pipeline{
 			steps {
 				script {
 					echo 'Building Docker Image...'
-					// Requires a 'Dockerfile' in the root of your project
 					bat "docker build -t $IMAGE_NAME:$IMAGE_TAG ."
 				}
 			}
-		}
-
-		stage('Push Docker Image') {
-			steps{
-				script{
-					echo 'Pushing to Docker Hub...'
-					withCredentials([usernamePassword(credentialsId: DOCKER_CRED_ID, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-						// Login, Push, and Logout for security
-						bat "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
-						bat "docker push $IMAGE_NAME:$IMAGE_TAG"
-						bat "docker logout"
-					}
-				}
-			}
-
 		}
 
 	}
