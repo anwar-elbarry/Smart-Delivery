@@ -59,18 +59,22 @@ CREATED → COLLECTED → IN_STOCK → IN_TRANSIT → DELIVERED
 ## 🛠️ Technology Stack
 
 ### Backend
-| Technology | Version | Purpose |
+| Technology | Version/Tool | Purpose |
 |-----------|---------|---------|
+| **Java** | 21 | Programming Language |
 | **Spring Boot** | 3.5.7 | Application Framework |
-| **Java** | 17 | Programming Language |
 | **Maven** | 3.8+ | Build & Dependency Management |
 | **PostgreSQL** | 12+ | Relational Database |
-| **Hibernate/JPA** | 6.6.33 | ORM Framework |
+| **Spring Data JPA** | - | ORM Framework |
 | **Liquibase** | 5.0.1 | Database Migration |
+| **Spring Security** | - | Authentication & Authorization |
+| **JWT (Java JWT)** | 0.12.6 | Secure API Tokens |
+| **SpringDoc OpenAPI**| 2.8.13 | API Documentation (Swagger) |
 | **MapStruct** | 1.6.3 | Object Mapping |
-| **SpringDoc OpenAPI** | 2.8.13 | API Documentation (Swagger) |
-| **Lombok** | 1.18.34 | Boilerplate Reduction |
-| **Jakarta Validation** | - | Input Validation |
+| **Lombok** | 1.18.34 | Boilerplate Code Reduction |
+| **Spring Data Redis**| - | Caching |
+| **Spring Boot Mail**| - | Email Notifications |
+| **Dotenv** | 4.0.0 | Environment Variable Management |
 
 ### Architecture Patterns
 - ✅ RESTful API Design
@@ -78,6 +82,7 @@ CREATED → COLLECTED → IN_STOCK → IN_TRANSIT → DELIVERED
 - ✅ DTO Pattern with MapStruct
 - ✅ Centralized Exception Handling
 - ✅ Repository Pattern with Spring Data JPA
+- ✅ Role-Based Access Control (RBAC)
 
 ---
 
@@ -234,7 +239,7 @@ org.example.smart_delivery/
 ## 🚀 Installation & Setup
 
 ### Prerequisites
-- ☑️ **Java 17** or higher
+- ☑️ **Java 21** or higher
 - ☑️ **Maven 3.8+**
 - ☑️ **PostgreSQL 12+**
 - ☑️ **Git**
