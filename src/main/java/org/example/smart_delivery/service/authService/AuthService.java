@@ -6,9 +6,13 @@ import org.example.security.jwt.JwtService;
 import org.example.security.service.TokenService;
 import org.example.smart_delivery.dto.request.AuthRequest;
 import org.example.smart_delivery.dto.request.RegisterRequest;
+import org.example.smart_delivery.dto.response.AuthResponse;
+import org.example.smart_delivery.dto.response.UserRespDTO;
 import org.example.smart_delivery.entity.Role;
 import org.example.smart_delivery.entity.User;
+import org.example.smart_delivery.entity.enums.Provider;
 import org.example.smart_delivery.exception.ResourceNotFoundException;
+import org.example.smart_delivery.mapper.response.UserRespMapper;
 import org.example.smart_delivery.repository.RoleRepository;
 import org.example.smart_delivery.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,8 +35,9 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
     private final RoleRepository roleRepository;
+    private final UserRespMapper userRespMapper;
 
-    public Map<String, String> login(AuthRequest request) throws UsernameNotFoundException{
+    public AuthResponse login(AuthRequest request) throws UsernameNotFoundException{
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -43,10 +48,17 @@ public class AuthService {
         User user = userRepository.findUserByusername(request.username()).orElseThrow(
                 () -> new UsernameNotFoundException(request.username()));
 
-        return generateTokens(user);
+        UserRespDTO userRespDTO = userRespMapper.toRespDto(user);
+        Map<String,String> tokens = generateTokens(user);
+
+        return AuthResponse.builder()
+                .accessToken(tokens.get("accessToken"))
+                .refreshToken(tokens.get("refreshToken"))
+                .user(userRespDTO)
+                .build();
     }
 
-    public Map<String, String> register(RegisterRequest request) throws RuntimeException{
+    public AuthResponse register(RegisterRequest request) throws RuntimeException{
         // Vérifier si l'utilisateur existe déjà
         if (userRepository.existsByUsername(request.username())) {
             throw new RuntimeException("Username is already taken");
@@ -70,11 +82,18 @@ public class AuthService {
                 .telephone(request.telephone())
                 .adress(request.adresse())
                 .role(role)
+                .provider(Provider.LOCAL)
+                .enable(true)
                 .build();
 
-        userRepository.save(user);
-
-        return generateTokens(user);
+        User savedUser =  userRepository.save(user);
+        UserRespDTO userRespDTO = userRespMapper.toRespDto(savedUser);
+         Map<String,String> tokens = generateTokens(user);
+        return AuthResponse.builder()
+                .accessToken(tokens.get("accessToken"))
+                .refreshToken(tokens.get("refreshToken"))
+                .user(userRespDTO)
+                .build();
     }
 
     public Map<String, String> refreshToken(String refreshToken) {
