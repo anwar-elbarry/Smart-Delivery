@@ -8,6 +8,7 @@ import org.mapstruct.*;
 public interface UserRespMapper {
     @Mapping(target = "roleName", source = "role.name")
     UserRespDTO toRespDto(User entity);
+    @Mapping(target = "providerId", ignore = true)
     @Mapping(target = "verificationCodeExpired", ignore = true)
     @Mapping(target = "verificationCode", ignore = true)
     @Mapping(target = "password", ignore = true)
