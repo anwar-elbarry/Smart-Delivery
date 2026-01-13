@@ -36,10 +36,10 @@ public class AuthController {
             @ApiResponse(responseCode = "401", description = "Invalid credentials")
     })
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody AuthRequest request) {
+    public ResponseEntity<?> login(@RequestBody AuthRequest request) {
         try {
-            Map<String, String> tokens = authService.login(request);
-            return ResponseEntity.ok(tokens);
+            AuthResponse authResponse = authService.login(request);
+            return ResponseEntity.ok(authResponse);
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("error", "Invalid username or password"));
@@ -61,10 +61,10 @@ public class AuthController {
     public ResponseEntity<AuthResponse> register (@Valid @RequestBody RegisterRequest request) throws RuntimeException{
 
         // Générer le token JWT
-        Map<String,String> jwtToken = authService.register(request);
+        AuthResponse authResponse = authService.register(request);
 
         // Retourner la réponse avec le token
-        return ResponseEntity.ok(new AuthResponse(jwtToken.get("accessToken"),jwtToken.get("refreshToken")));
+        return ResponseEntity.ok(authResponse);
     }
 
     @Operation(summary = "User logout")
