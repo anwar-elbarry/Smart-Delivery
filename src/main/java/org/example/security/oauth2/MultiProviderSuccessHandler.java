@@ -47,7 +47,7 @@ public class MultiProviderSuccessHandler extends SimpleUrlAuthenticationSuccessH
 
             // Generate token with user's role
             String accessToken = jwtService.generateAccessToken(userDb);
-            String refreshToken = jwtService.generateAccessToken(userDb);
+            String refreshToken = jwtService.generateRefreshToken(userDb);
             sendTokenResponse(response, accessToken,refreshToken);
 
         } catch (Exception e) {
