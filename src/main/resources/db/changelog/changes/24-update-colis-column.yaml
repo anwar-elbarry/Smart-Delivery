@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: rename-ville-destination-column
+      author: admin
+      changes:
+        - renameColumn:
+            tableName: colis
+            oldColumnName: villeDestination
+            newColumnName: ville_destination
+            columnDataType: varchar(255)
+      rollback:
+        - renameColumn:
+            tableName: colis
+            oldColumnName: ville_destination
+            newColumnName: villeDestination
+            columnDataType: varchar(255)

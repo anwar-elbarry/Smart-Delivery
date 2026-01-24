@@ -45,3 +45,5 @@ databaseChangeLog:
       file: db/changelog/changes/22-update-users-table.yaml
   - include:
       file: db/changelog/changes/23-update-users-column.yaml
+  - include:
+              file: db/changelog/changes/24-update-colis-column.yaml
