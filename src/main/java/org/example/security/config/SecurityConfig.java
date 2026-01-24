@@ -54,8 +54,18 @@ public class SecurityConfig {
                                 .requestMatchers("/api/zones/**").hasAuthority("ZONE_CRUD")
                                 .anyRequest().authenticated()
                         )
+                // Configuration OAuth2 Login
                 .oauth2Login(oauth2 -> oauth2
-                        .successHandler(multiProviderSuccessHandler))
+                        .authorizationEndpoint(authorization -> authorization
+                                .baseUri("/oauth2/authorize")
+                        )
+                        .redirectionEndpoint(redirection -> redirection
+                                .baseUri("/oauth2/callback/*")
+                        )
+                        .successHandler(multiProviderSuccessHandler)
+                )
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
                 .userDetailsService(userDetailsService)
                 .addFilterBefore(jwtAuthFiler , UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
