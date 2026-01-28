@@ -1,5 +1,6 @@
 package org.example.security.config;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.example.security.jwt.JwtAuthFiler;
 import org.example.security.oauth2.MultiProviderSuccessHandler;
@@ -54,6 +55,20 @@ public class SecurityConfig {
                                 .requestMatchers("/api/zones/**").hasAuthority("ZONE_CRUD")
                                 .anyRequest().authenticated()
                         )
+                // Empêcher la redirection vers la page de login pour les API
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.setContentType("application/json");
+                            response.getWriter().write("{\"error\": \"Unauthorized\", \"message\": \"" + authException.getMessage() + "\"}");
+                        })
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            response.setContentType("application/json");
+                            response.getWriter().write("{\"error\": \"Forbidden\", \"message\": \"" + accessDeniedException.getMessage() + "\"}");
+                        })
+                )
+
                 // Configuration OAuth2 Login
                 .oauth2Login(oauth2 -> oauth2
                         .authorizationEndpoint(authorization -> authorization
