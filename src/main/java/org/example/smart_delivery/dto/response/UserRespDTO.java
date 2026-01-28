@@ -22,7 +22,8 @@ public class UserRespDTO {
 
     private String adress;
 
-    private String roleName;
+    private RoleResDTO role;
     private Provider provider;
+    private String providerId;
     private Boolean enable;
 }

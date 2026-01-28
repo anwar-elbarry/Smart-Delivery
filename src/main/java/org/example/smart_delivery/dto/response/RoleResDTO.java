@@ -2,7 +2,6 @@ package org.example.smart_delivery.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.example.smart_delivery.entity.enums.UserRole;
 
 import java.util.Set;
 
