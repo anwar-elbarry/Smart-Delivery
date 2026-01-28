@@ -52,6 +52,15 @@ public class RoleController {
         return ResponseEntity.ok(roleService.getById(id));
     }
 
+    @Operation(summary = "Get role by name")
+    @ApiResponse(responseCode = "200", description = "Role found")
+    @ApiResponse(responseCode = "404", description = "Role not found")
+    @PreAuthorize("hasRole('GESTIONNAIRE')")
+    @GetMapping("/name/{name}")
+    public ResponseEntity<RoleResDTO> getByName(@PathVariable String name) {
+        return ResponseEntity.ok(roleService.getByName(name));
+    }
+
     @Operation(summary = "Get all roles")
     @ApiResponse(responseCode = "200", description = "List of roles")
 
