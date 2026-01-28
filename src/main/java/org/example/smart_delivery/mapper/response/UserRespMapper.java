@@ -2,16 +2,14 @@ package org.example.smart_delivery.mapper.response;
 
 import org.example.smart_delivery.dto.response.UserRespDTO;
 import org.example.smart_delivery.entity.User;
+import org.example.smart_delivery.mapper.RoleMapper;
 import org.mapstruct.*;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",uses = RoleMapper.class)
 public interface UserRespMapper {
-    @Mapping(target = "roleName", source = "role.name")
     UserRespDTO toRespDto(User entity);
-    @Mapping(target = "providerId", ignore = true)
     @Mapping(target = "verificationCodeExpired", ignore = true)
     @Mapping(target = "verificationCode", ignore = true)
     @Mapping(target = "password", ignore = true)
-    @Mapping(target = "role.name", source = "roleName")
     User toRespEntity(UserRespDTO dto);
 }
